@@ -1,0 +1,42 @@
+<!-- <div class="code-checker">
+  <h3>Paste code (search/sort example)</h3>
+
+  <textarea rows="12" [(ngModel)]="code" placeholder="Paste code here..."></textarea>
+
+  <div class="actions">
+    <button (click)="detectLanguage()" [disabled]="loading">Detect Language</button>
+    <button (click)="verifyCode()" [disabled]="loading || !detectedLanguage">Verify & Visualize</button>
+    <span *ngIf="detectedLanguage">Detected: <strong>{{ detectedLanguage }}</strong></span>
+  </div>
+
+  <div class="progress-row" *ngIf="lastVerify">
+    <label>Correctness:</label>
+    <div class="progress">
+      <div class="bar" [style.width]="lastVerify?.percentCorrect + '%'"></div>
+    </div>
+    <span class="percent">{{ lastVerify?.percentCorrect }}%</span>
+  </div>
+
+  <div class="errors" *ngIf="lastVerify?.errors?.length">
+    <h4>Errors / Warnings</h4>
+    <ul>
+      <li *ngFor="let e of lastVerify.errors">
+        <strong *ngIf="e.line && e.line > 0">Line {{ e.line }}:</strong>
+        <span>{{ e.message }}</span>
+      </li>
+    </ul>
+  </div>
+
+  <hr/>
+
+  <app-array-visualizer
+    [array]="visualArray"
+    [code]="code"
+    [steps]="steps"
+    [isSorting]="isSortingMode"
+    [target]="searchTarget"
+    [errorLines]="errorLines"
+    [percentCorrect]="lastVerify?.percentCorrect"
+    (searchComplete)="onSearchComplete($event)"
+  ></app-array-visualizer>
+</div> -->
