@@ -1,0 +1,135 @@
+#History-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fbfdff 0%, #f9f9f9 100%);
+  color: #111;
+  font-family: "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+#History-header {
+  background-color: #b7d5f8;
+  color: #000;
+  padding: 1em;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.22em;
+  border-bottom: 1.5px solid black;
+}
+
+footer {
+  background-color: #b7d5f8;
+  color: #000;
+  padding: 10px;
+  text-align: center;
+  margin-top: auto;
+}
+
+.history-container {
+  flex:  auto;
+  margin: 30px auto;
+}
+
+.history-container h2 {
+  color: #000;
+  font-size: 1.25rem;
+  margin: 2em top;
+    text-align: center;
+
+}
+
+.snippet {
+  border-left: 5px solid #000000;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  transition: transform 0.3s ease }
+
+.snippet:hover {
+  transform: translateY(-4px);
+
+}
+
+
+.snippet-summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 155px;
+  align-items: center;
+  padding: 22px 14px;
+  cursor: pointer;
+  background: #ffffff;
+}
+
+.summary-left {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.snippet-title {
+  font-weight: 700;
+  color: #000000;
+  font-size: 1em;
+}
+
+.snippet-data {
+  color: #000000a3;
+  font-size: 0.88rem;
+}
+
+
+.summary-right {
+  font-size: 0.9em;
+  color: #000000a3;
+}
+
+.snippet-body {
+  padding: 5px;
+  background: #f6f8fb;
+}
+
+
+.code-snippet {
+  background: #f3f6fb;
+  color: #111;
+  font-size: 13px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  margin: 0;
+}
+
+.snippet[open] {
+  border-left-color: #b7d5f8;
+}
+
+.snippet[open] .summary-right {
+  color: #000;
+}
+
+
+.lang {
+  display: inline-block;
+  margin-left: 8px;
+  font-weight: 600;
+  font-size: 0.8em;
+  color: #000;
+  padding: 3px 8px;
+}
+
+@media (max-width: 720px) {
+  .snippet-summary {
+    padding: 10px;
+  }
+  .snippet-body {
+    padding: 12px;
+  }
+  .history-container {
+    padding: 0 12px 28px;
+  }
+}
