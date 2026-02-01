@@ -1,0 +1,69 @@
+<div class="sidebar" [class.collapsed]="isCollapsed">
+  <div class="sidebar-header">
+    <img src="assets/images/Logo.png" alt="logo" class="logo" *ngIf="!isCollapsed">
+    <!-- <h2 *ngIf="!isCollapsed">VisualizeIt</h2> -->
+    <button class="toggle-btn" (click)="toggleSidebar()">
+      <span>☰</span>
+    </button>
+  </div>
+
+  <ul class="menu">
+    <li>
+      <a routerLink="/" routerLinkActive="active">
+        <mat-icon>dashboard</mat-icon>
+        <span *ngIf="!isCollapsed">Dashboard</span>
+      </a>
+    </li>
+
+    <li>
+      <a routerLink="/translator" routerLinkActive="active">
+        <mat-icon>translate</mat-icon>
+        <span *ngIf="!isCollapsed">Translate</span>
+      </a>
+    </li>
+
+    <li>
+      <a routerLink="/history" routerLinkActive="active">
+        <mat-icon>history</mat-icon>
+        <span *ngIf="!isCollapsed">History</span>
+      </a>
+    </li>
+
+    <li>
+      <a routerLink="/custom" routerLinkActive="active">
+        <mat-icon>code</mat-icon>
+        <span *ngIf="!isCollapsed">Custom Code</span>
+      </a>
+    </li>
+
+    <li>
+      <a routerLink="/" routerLinkActive="active">
+        <mat-icon>sort</mat-icon>
+        <span *ngIf="!isCollapsed">Levels</span>
+      </a>
+    </li>
+
+    <!-- <li>
+      <a (click)="toggleSortingMenu($event)">
+        <mat-icon>sort</mat-icon>
+        <span *ngIf="!isCollapsed">Sorting Algorithms</span>
+        <i class="arrow">{{ showSortingDropdown ? '▲' : '▼' }}</i>
+      </a>
+    </li>
+    <div *ngIf="showSortingDropdown" class="leftmargin">
+        <li><a routerLink="/sorting">Bubble Sort</a></li>
+    </div>
+
+    
+    <li>
+      <a (click)="toggleSearchingMenu($event)">
+        <mat-icon>search</mat-icon>
+        <span *ngIf="!isCollapsed">Searching Algorithms</span>
+        <i class="arrow">{{ showSearchingDropdown ? '▲' : '▼' }}</i>
+      </a>
+    </li>
+    <div *ngIf="showSearchingDropdown" class="leftmargin">
+        <li><a routerLink="/searching">Linear Search</a></li>
+    </div> -->
+  </ul>
+</div>
