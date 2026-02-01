@@ -1,0 +1,46 @@
+<div class="topic-container">
+  
+  <div *ngIf="isLoading" class="loading-message">
+    <h3>Loading Levels...</h3>
+  </div>
+
+  <div class="level-sidebar" *ngIf="!isLoading">
+    <h3>{{ topicId | titlecase }}</h3> 
+    
+    <button *ngFor="let level of currentLevels" 
+            class="level-item" 
+            [class.active]="selectedLevel?.id === level.id"
+            [class.locked-item]="level.levelNumber > unlockedLevel" 
+            (click)="selectLevel(level)">
+      
+      <div class="level-info">
+        <span class="status-icon">
+          <span *ngIf="level.levelNumber < unlockedLevel" style="color: #00ff88;">✔</span>
+          <span *ngIf="level.levelNumber === unlockedLevel" style="color: #00f2ff;">●</span>
+          <span *ngIf="level.levelNumber > unlockedLevel" style="color: #4a5568;">🔒</span>
+        </span>
+
+        <span class="level-title">Level {{ level.levelNumber }}: {{ level.title }}</span>
+      </div>
+    </button>
+  </div>
+
+  <div class="workspace" *ngIf="!isLoading && selectedLevel">
+    <div>
+      <h2>{{ selectedLevel.title }}</h2>
+      <p class="instruction">{{ selectedLevel.question }}</p>
+      
+      <div class="code-preview">{{ selectedLevel.codeSnippet }}</div>
+
+      <textarea [(ngModel)]="userAnswer" placeholder="// Type your solution here..."></textarea>
+      
+      <div class="actions">
+        <button class="btn-submit" (click)="submitAnswer()">Submit Code</button>
+      </div>
+
+      <div *ngIf="showSuccess" class="success-message">
+        <span>🎉 Excellent! System updated. Next level unlocked.</span>
+      </div>
+    </div>
+  </div>
+</div>
