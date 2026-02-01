@@ -1,0 +1,21 @@
+<div class="compare-mode">
+  <div class="compare-container">
+    <div class="half">
+      <app-array-visualizer
+        [array]="leftArray"
+        [code]="leftCode"
+        [compareMode]="true"
+      ></app-array-visualizer>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="half">
+      <app-array-visualizer
+        [array]="rightArray"
+        [code]="rightCode"
+        [compareMode]="true"
+      ></app-array-visualizer>
+    </div>
+  </div>
+</div>
