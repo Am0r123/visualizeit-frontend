@@ -1,0 +1,164 @@
+<div class="main-container" [class.compare-mode]="compareMode">
+  <div class="visualizer">
+    <div class="array-section">
+      <div class="array">
+        <div
+          *ngFor="let num of currentState.array; let i = index"
+          class="bar"
+          [class.current]="i === currentState.currentIndex"
+          [class.compare]="i === currentState.compareIndex"
+          [class.found]="i === currentState.foundIndex"
+          [style.height.%]="(num / maxValue) * 100"
+        >
+          {{ num }}
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <button (click)="play()" [disabled]="isPlaying">▶️ Play</button>
+      <button (click)="pause()" [disabled]="!isPlaying || isPaused">
+        ⏸ Pause
+      </button>
+      <button (click)="resume()" [disabled]="!isPaused">🔁 Resume</button>
+      <button (click)="previousStep()" [disabled]="currentStepIndex <= 0">
+        ⏮ Previous Step
+      </button>
+      <button
+        (click)="nextStep()"
+        [disabled]="currentStepIndex >= steps.length - 1"
+      >
+        ⏭ Next Step
+      </button>
+      <div class="speed-control">
+        <label>Speed:</label>
+        <input
+          type="range"
+          min="1"
+          max="10"
+          [value]="speedMultiplier"
+          (input)="changeSpeed($event)"
+        />
+        <span>{{ speedMultiplier }}x</span>
+      </div>
+      <button
+        *ngIf="!compareMode"
+        (click)="toggleCompare()"
+        class="compare-button"
+      >
+        ⚡ Compare
+      </button>
+    </div>
+    <div class="code-and-controls">
+      <div class="code-section">
+        <div class="code-progress-container" *ngIf="lastVerify">
+          <div
+            class="code-progress-fill"
+            [style.width]="lastVerify?.percentCorrect + '%'"
+          >
+            <span class="progress-text">
+              {{ lastVerify?.percentCorrect }}%
+            </span>
+          </div>
+        </div>
+
+        <div *ngIf="isVisualizing">
+          <pre class="code-block">
+    <ng-container *ngFor="let line of code.split('\n'); let i = index">
+        <div 
+            class="code-line-row"
+            [class.highlight]="i + 1 === currentState.line"
+            [class.error-line]="errorLines.includes(i + 1)"
+        >
+            <span class="line-number">{{ i + 1 }}</span>
+            <span class="line-text">{{ line || ' ' }}</span>
+        </div>
+    </ng-container>
+</pre>
+        </div>
+
+        <div *ngIf="!isVisualizing">
+          <textarea
+            rows="12"
+            class="code-editor"
+            [(ngModel)]="code"
+            placeholder="Paste code here (Search/Sort example)..."
+            (ngModelChange)="onCodeChange()"
+            [disabled]="loading"
+          >
+          </textarea>
+        </div>
+      </div>
+
+      <div class="status-panel">
+        <div class="status-box" *ngIf="!isVisualizing">
+          <h4>Code Status</h4>
+          <div class="status-item">
+            Language: <strong>{{ detectedLanguage || "Detecting..." }}</strong>
+          </div>
+
+          <div class="progress-row" *ngIf="lastVerify">
+            <label>Correctness:</label>
+            <div class="progress">
+              <div
+                class="bar"
+                [style.width]="lastVerify?.percentCorrect + '%'"
+              ></div>
+            </div>
+            <span
+              class="percent correctness-percent"
+              [style.color]="
+                lastVerify.percentCorrect > 75
+                  ? 'green'
+                  : lastVerify.percentCorrect > 50
+                  ? 'orange'
+                  : 'red'
+              "
+            >
+              {{ lastVerify?.percentCorrect }}%
+            </span>
+          </div>
+        </div>
+
+        <div class="status-box" *ngIf="isVisualizing">
+          <h4>Visualization Status</h4>
+          <div class="status-item" *ngIf="complexity">
+            <strong>{{ complexity }}</strong>
+          </div>
+
+          <div class="status-item">
+            Step: {{ currentStepIndex }} / {{ steps.length }}
+          </div>
+        </div>
+
+        <div class="errors-panel" *ngIf="lastVerify?.errors?.length">
+          <h4>Errors / Warnings ({{ lastVerify.errors.length }})</h4>
+          <ul class="error-list">
+            <li *ngFor="let e of lastVerify.errors" [attr.data-line]="e.line">
+              <strong *ngIf="e.line && e.line > 0">Line {{ e.line }}:</strong>
+              <span>{{ e.message }}</span>
+              <span class="error-link-icon">➡️</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="actions-group">
+          <button
+            (click)="verifyAndStartVisualization()"
+            [disabled]="loading || !detectedLanguage || steps.length > 0"
+            *ngIf="!isVisualizing"
+            class="primary-button"
+          >
+            Verify & Visualize
+          </button>
+          <button
+            (click)="resetVisualization()"
+            *ngIf="isVisualizing"
+            class="secondary-button"
+          >
+            Reset Editor
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
