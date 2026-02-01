@@ -1,0 +1,145 @@
+// --- VARIABLES (Cyberpunk Theme) ---
+$bg-dark: #060b13;        // Main page background
+$bg-panel: #0f1522;       // Card background
+$text-main: #ffffff;
+$text-muted: #8b9bb4;
+$border-color: #1f293a;
+
+// Neon Colors
+$neon-cyan: #00f2ff;
+$neon-green: #00ff88;
+$neon-purple: #bd00ff;
+$neon-yellow: #f2ff00;
+
+// Mixin for card hover glow
+@mixin neon-hover($color) {
+  border-color: $color;
+  box-shadow: 0 0 15px rgba($color, 0.2), inset 0 0 10px rgba($color, 0.05);
+  
+  .corner-accent {
+    opacity: 1;
+    background: $color;
+    box-shadow: 0 0 20px $color;
+  }
+}
+
+:host {
+  display: block;
+  background-color: $bg-dark;
+  min-height: 100vh;
+}
+
+.levels-dashboard {
+  padding: 3rem;
+  background-color: $bg-dark;
+  font-family: 'Inter', sans-serif;
+
+  .header {
+    margin-bottom: 3rem;
+    
+    h2 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      color: $text-main;
+      letter-spacing: 0.5px;
+    }
+    
+    p {
+      color: $text-muted;
+      font-size: 1.1rem;
+    }
+  }
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.topic-card {
+  background: $bg-panel;
+  border: 1px solid $border-color;
+  border-radius: 16px; // More rounded like the design
+  padding: 25px;
+  height: 220px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+
+  // --- HOVER EFFECTS ---
+  &:hover {
+    transform: translateY(-5px);
+    // Default glow (Cyan) - overrides specific colors below if needed
+    @include neon-hover($neon-cyan);
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+    z-index: 2;
+    position: relative;
+  }
+
+  // --- ICON / TOP AREA ---
+  .icon-area {
+    font-size: 3rem;
+    text-align: left; // Align left to match design
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
+  }
+
+  // --- INFO AREA ---
+  .info-area {
+    h3 {
+      font-weight: 700;
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+      color: $text-main;
+    }
+  }
+
+  // --- TAGS (Badges) ---
+  .tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    
+    .tag {
+      background: rgba(255, 255, 255, 0.05); // Subtle dark glass
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: $text-muted;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.3s;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+    }
+  }
+
+  // --- CORNER ACCENT (The glowing corner) ---
+  .corner-accent {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0) 70%);
+    opacity: 0.3;
+    transition: all 0.4s ease;
+    filter: blur(10px);
+  }
+}
