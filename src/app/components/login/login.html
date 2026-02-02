@@ -1,0 +1,93 @@
+<div class="algo-bg">
+  <div class="nodes"></div>
+
+  <div class="auth-card">
+    <!-- HEADER -->
+    <div class="editor-header">
+      <span class="dot red"></span>
+      <span class="dot yellow"></span>
+      <span class="dot green"></span>
+      <span class="title">
+        {{ isLogin ? 'Login' : 'Sign Up' }}
+      </span>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <form
+      *ngIf="isLogin"
+      #loginForm="ngForm"
+      (ngSubmit)="submit(loginForm)"
+      novalidate
+    >
+      <input
+        type="email"
+        name="email"
+        ngModel
+        required
+        placeholder="Email"
+      />
+
+      <input
+        type="password"
+        name="password"
+        ngModel
+        required
+        placeholder="Password"
+      />
+
+      <button type="submit" [disabled]="loginForm.invalid">
+        Login
+      </button>
+
+      <p class="message" *ngIf="message">{{ message }}</p>
+
+      <p class="switch">
+        New user?
+        <span (click)="toggleMode()">Create account</span>
+      </p>
+    </form>
+
+    <!-- SIGN UP FORM -->
+    <form
+      *ngIf="!isLogin"
+      #signupForm="ngForm"
+      (ngSubmit)="submit(signupForm)"
+      novalidate
+    >
+      <input
+        type="text"
+        name="username"
+        ngModel
+        required
+        placeholder="Username"
+      />
+
+      <input
+        type="email"
+        name="email"
+        ngModel
+        required
+        placeholder="Email"
+      />
+
+      <input
+        type="password"
+        name="password"
+        ngModel
+        required
+        placeholder="Password"
+      />
+
+      <button type="submit" [disabled]="signupForm.invalid">
+        Sign Up
+      </button>
+
+      <p class="message" *ngIf="message">{{ message }}</p>
+
+      <p class="switch">
+        Already have an account?
+        <span (click)="toggleMode()">Login</span>
+      </p>
+    </form>
+  </div>
+</div>
