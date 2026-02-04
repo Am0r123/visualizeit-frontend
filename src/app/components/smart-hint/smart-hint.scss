@@ -1,0 +1,109 @@
+$electric-blue: #00f2ff;
+$loss-red: #ff0055;
+$dark-bg: #050b14;
+
+/* --- 1. Button Container --- */
+.hint-container { position: absolute; top: 20px; right: 20px; z-index: 100; }
+
+.electric-btn {
+  background: #020817;
+  border: 2px solid $electric-blue;
+  border-radius: 50%; width: 75px; height: 75px;
+  position: relative; cursor: pointer;
+  box-shadow: 0 0 25px rgba(0, 242, 255, 0.4), inset 0 0 15px rgba(0, 242, 255, 0.2);
+  transition: all 0.3s ease;
+  display: flex; justify-content: center; align-items: center;
+  padding: 10px;
+
+  &:hover {
+    background: #0a1529;
+    box-shadow: 0 0 50px $electric-blue, inset 0 0 30px $electric-blue;
+    transform: scale(1.05);
+  }
+  
+  &:disabled { filter: grayscale(1); opacity: 0.5; cursor: not-allowed; }
+}
+
+.badge {
+  position: absolute; top: 0px; right: 0px;
+  background: $loss-red; color: white; font-family: sans-serif;
+  width: 24px; height: 24px; border-radius: 50%;
+  font-weight: bold; border: 2px solid white;
+  display: flex; justify-content: center; align-items: center;
+  box-shadow: 0 0 10px $loss-red; z-index: 10;
+}
+
+/* --- SVG STYLES --- */
+.small-bulb-svg { width: 100%; height: auto; }
+
+.big-bulb-svg {
+  width: 320px; height: auto; position: relative; z-index: 2;
+  filter: drop-shadow(0 0 40px rgba(0, 242, 255, 0.3));
+
+  // Flicker the filament
+  .filament-part { animation: flicker 0.2s infinite alternate; }
+}
+
+/* --- 2. Full Screen Animation --- */
+.overlay-animation {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(3, 8, 18, 0.98); z-index: 9999;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  animation: fadeOut 5s forwards 0.5s;
+}
+
+.big-lamp-container {
+    position: relative; margin-bottom: 50px;
+    display: flex; justify-content: center; align-items: center;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* --- LIGHT RIPPLES (Around the BULB, not base) --- */
+.bulb-glow-animation {
+    position: absolute; 
+    top: 35%; /* Positions centered on the Glass Bulb */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px; height: 100px;
+    z-index: 0; pointer-events: none;
+}
+
+.light-ring {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 2px solid $electric-blue;
+    box-shadow: 0 0 30px $electric-blue, inset 0 0 20px $electric-blue;
+    opacity: 0;
+    animation: expandRing 2.5s infinite linear;
+
+    &.ring1 { animation-delay: 0s; }
+    &.ring2 { animation-delay: 0.8s; }
+    &.ring3 { animation-delay: 1.6s; }
+}
+
+/* --- TEXT & BOX STYLES --- */
+.content { text-align: center; position: relative; z-index: 10; }
+.trails-text { color: $electric-blue; font-size: 3rem; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 4px; text-shadow: 0 0 40px $electric-blue; font-family: sans-serif; }
+.sub-text { color: #8892b0; font-size: 1.5rem; margin: 0 0 30px 0; }
+.minus-one-small { font-size: 2.5rem; color: $loss-red; font-weight: 900; text-shadow: 0 0 20px $loss-red; margin: 0 auto; padding: 5px 20px; border: 2px solid rgba($loss-red, 0.5); border-radius: 8px; display: inline-block; animation: slideUp 0.5s ease-out; }
+
+.hint-box {
+  position: absolute; bottom: 30px; right: 30px; background: #020817; border: 1px solid $electric-blue; color: #fff; padding: 25px; width: 380px; border-radius: 12px; z-index: 200; box-shadow: 0 10px 50px rgba(0, 0, 0, 0.9); animation: slideUp 0.5s;
+  h4 { margin: 0 0 15px 0; color: $electric-blue; text-shadow: 0 0 10px $electric-blue; }
+  .hint-header { display: flex; justify-content: space-between; }
+  .close-btn { background: none; border: none; color: #8892b0; font-size: 24px; cursor: pointer; }
+}
+
+/* Animations */
+@keyframes expandRing {
+    0% { width: 100px; height: 100px; opacity: 1; border-width: 5px; }
+    100% { width: 500px; height: 500px; opacity: 0; border-width: 0px; }
+}
+@keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes fadeOut { 0%, 80% { opacity: 1; } 100% { opacity: 0; pointer-events: none; } }
+@keyframes popIn { from { transform: scale(0.8); opacity:0; } to { transform: scale(1); opacity:1;} }
+@keyframes flicker { 0% { opacity: 1; filter: brightness(1.2); } 100% { opacity: 0.8; filter: brightness(1); } }
+
+.loader { border: 3px solid rgba($electric-blue, 0.2); border-top: 3px solid $electric-blue; border-radius: 50%; width: 24px; height: 24px; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }

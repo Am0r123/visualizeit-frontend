@@ -1,0 +1,86 @@
+<div class="hint-container">
+  <button class="electric-btn" (click)="useHint()" [disabled]="hintsLeft === 0 || isLoading">
+    
+    <svg class="small-bulb-svg" *ngIf="!isLoading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 600">
+      <defs>
+        <filter id="small-glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+          <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <linearGradient id="filament-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#00f2ff;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      
+      <g transform="translate(0, 0)">
+          <path d="M256 32C149.96 32 64 117.96 64 224c0 66.56 35.09 125.56 88 158.69V416h208v-33.31c52.91-33.13 88-92.13 88-158.69 0-106.04-85.96-192-192-192z" fill="rgba(0, 242, 255, 0.1)" stroke="#00f2ff" stroke-width="8" filter="url(#small-glow)"/>
+          <path d="M192 224c0-35.35 28.65-64 64-64s64 28.65 64 64-28.65 64-64 64-64-28.65-64-64z" fill="url(#filament-grad)" filter="url(#small-glow)"/>
+          <rect x="176" y="416" width="160" height="40" rx="5" fill="#444" stroke="#555" stroke-width="2"/>
+          <path d="M156 460h200l20 60H136z" fill="#222" stroke="#00f2ff" stroke-width="2"/>
+          <rect x="116" y="520" width="280" height="20" rx="5" fill="#111" stroke="#00f2ff" stroke-width="2"/>
+      </g>
+    </svg>
+
+    <div *ngIf="isLoading" class="loader"></div>
+    <span class="badge">{{ hintsLeft }}</span>
+  </button>
+</div>
+
+<div class="overlay-animation" *ngIf="showAnimation">
+  
+  <div class="big-lamp-container">
+      
+      <div class="bulb-glow-animation">
+        <div class="light-ring ring1"></div>
+        <div class="light-ring ring2"></div>
+        <div class="light-ring ring3"></div>
+      </div>
+
+      <svg class="big-bulb-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 600">
+        <defs>
+          <filter id="big-glow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="20" result="coloredBlur"/>
+            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <linearGradient id="big-filament-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#00f2ff;stop-opacity:1" />
+          </linearGradient>
+          <linearGradient id="base-metal" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#333"/><stop offset="50%" stop-color="#666"/><stop offset="100%" stop-color="#333"/></linearGradient>
+        </defs>
+        
+        <path class="glass-part" d="M256 32C149.96 32 64 117.96 64 224c0 66.56 35.09 125.56 88 158.69V416h208v-33.31c52.91-33.13 88-92.13 88-158.69 0-106.04-85.96-192-192-192z" 
+              fill="rgba(0, 242, 255, 0.05)" stroke="#00f2ff" stroke-width="6" filter="url(#big-glow)"/>
+        
+        <path class="filament-part" d="M192 224c0-35.35 28.65-64 64-64s64 28.65 64 64-28.65 64-64 64-64-28.65-64-64z" 
+              fill="url(#big-filament-grad)" filter="url(#big-glow)"/>
+
+        <g>
+            <rect x="176" y="416" width="160" height="40" rx="4" fill="url(#base-metal)" stroke="#222" stroke-width="2"/>
+            <line x1="176" y1="426" x2="336" y2="426" stroke="#222" stroke-width="2"/>
+            <line x1="176" y1="436" x2="336" y2="436" stroke="#222" stroke-width="2"/>
+        </g>
+
+        <g class="pedestal">
+           <path d="M166 460h180l20 50H146z" fill="#1a1a1a" stroke="#00f2ff" stroke-width="2"/>
+           <rect x="116" y="510" width="280" height="30" rx="8" fill="#0b0b0b" stroke="#00f2ff" stroke-width="3"/>
+           <rect x="136" y="520" width="240" height="10" rx="4" fill="#003344"/>
+        </g>
+      </svg>
+  </div>
+  
+  <div class="content">
+    <h2 class="trails-text">TRIAL CONSUMED</h2>
+    <p class="sub-text">{{ hintsLeft }} Hints Remaining</p>
+    <div class="minus-one-small">-1</div>
+  </div>
+</div>
+
+<div class="hint-box" *ngIf="currentHint">
+  <div class="hint-header">
+    <h4>🤖 AI Tutor:</h4>
+    <button class="close-btn" (click)="currentHint = ''">×</button>
+  </div>
+  <p [innerHTML]="currentHint"></p>
+</div>
