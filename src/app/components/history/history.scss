@@ -1,0 +1,182 @@
+/* --- VARIABLES (Matched to Dashboard) --- */
+$dark-bg: #050b14;
+$card-bg: #0b1120;
+$electric-blue: #00f2ff;
+$neon-purple: #bc13fe;
+$text-main: #ffffff;
+$text-muted: #8892b0;
+
+/* --- Main Layout --- */
+#History-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: $dark-bg; /* Dark Navy Background */
+  color: $text-main;
+  font-family: "Segoe UI", Arial, sans-serif;
+  margin: 0;
+}
+
+/* --- Header Bar --- */
+#History-header {
+  background-color: $card-bg;
+  color: $text-main;
+  padding: 1.5em;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.5em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  text-shadow: 0 0 10px rgba(0, 242, 255, 0.3); /* Slight Neon Glow */
+}
+
+.history-container {
+  flex: auto;
+  margin: 40px auto;
+  width: 90%;
+  max-width: 800px;
+}
+
+.history-container h2 {
+  color: $electric-blue;
+  font-size: 1.25rem;
+  margin-bottom: 2em;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- Footer --- */
+footer {
+  background-color: $card-bg;
+  color: $text-muted;
+  padding: 15px;
+  text-align: center;
+  margin-top: auto;
+  font-size: 0.9rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* --- Snippet Card --- */
+.snippet {
+  background: $card-bg;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-left: 4px solid $electric-blue; /* Neon Left Border */
+  border-radius: 8px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border-color: rgba(0, 242, 255, 0.3);
+  }
+
+  &[open] {
+    border-left-color: $neon-purple; /* Changes color when open */
+    box-shadow: 0 0 15px rgba(188, 19, 254, 0.1);
+    
+    .summary-right { color: $electric-blue; }
+  }
+}
+
+.snippet-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  cursor: pointer;
+  background: $card-bg;
+  color: white;
+  list-style: none; /* Hides default triangle */
+}
+
+/* Remove default marker */
+.snippet-summary::-webkit-details-marker { display: none; }
+
+details[open] .snippet-summary {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.summary-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.snippet-title {
+  font-weight: 700;
+  color: white;
+  font-size: 1.1em;
+}
+
+.snippet-data {
+  color: $text-muted;
+  font-size: 0.85rem;
+}
+
+.summary-right {
+  font-size: 0.9em;
+  color: $text-muted;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+/* --- Expanded Body --- */
+.snippet-body {
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.2); /* Slightly darker inside */
+}
+
+.code-snippet {
+  background: #020817; /* Very dark code block */
+  color: #a5b3ce;
+  font-size: 13px;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin: 0;
+  overflow-x: auto;
+  font-family: 'Consolas', 'Courier New', monospace;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
+
+.lang {
+  display: inline-block;
+  margin-left: 10px;
+  font-weight: 600;
+  font-size: 0.75em;
+  color: $dark-bg;
+  padding: 2px 8px;
+  background: $electric-blue; /* Neon tag */
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+/* --- Button Style (Electric) --- */
+.open-btn {
+  background: transparent;
+  color: $electric-blue;
+  border: 1px solid $electric-blue;
+  padding: 8px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.8rem;
+
+  &:hover {
+    background: rgba(0, 242, 255, 0.1);
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+    transform: translateY(-2px);
+  }
+}
+
+/* --- Responsive --- */
+@media (max-width: 720px) {
+  .snippet-summary { padding: 15px; }
+  .history-container { width: 95%; padding-bottom: 30px; }
+}

@@ -1,0 +1,42 @@
+<div id="History-body">
+  <div id="History-header">History</div>
+  
+  <main class="history-container">
+    <h2>Saved Snippets (Auto-deleted after 10 days)</h2>
+
+    <div *ngIf="isLoading" style="text-align: center; color: #666; margin-top: 20px;">
+      Loading history...
+    </div>
+
+    <div *ngIf="!isLoading && snippets.length === 0" style="text-align: center; color: #666; margin-top: 20px;">
+      <p>No saved snippets found.</p>
+    </div>
+
+    <details class="snippet" *ngFor="let s of snippets">
+      <summary class="snippet-summary">
+        <div class="summary-left">
+          <div class="snippet-title">{{ s.title }}</div>
+          <div class="snippet-data">
+            Saved on: {{ s.savedAt | date:'medium' }} · <span class="lang">{{ s.lang }}</span>
+          </div>
+        </div>
+        <div class="summary-right">View</div>
+      </summary>
+
+      <div class="snippet-body">
+        <pre class="code-snippet">{{ s.codeContent }}</pre>
+        
+        <div class="actions" style="margin-top: 15px; text-align: right;">
+            <button class="open-btn" (click)="openCode(s)">
+                Open in Editor
+            </button>
+        </div>
+      </div>
+    </details>
+
+  </main>
+  
+  <footer>
+      VisualizeIt History © 2026
+  </footer>
+</div>
