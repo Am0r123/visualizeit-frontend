@@ -1,0 +1,98 @@
+<div class="detective-container">
+  
+  <div class="header-section">
+    <h1>🕵️ Detective Mode</h1>
+    <p>Find the Bug. Fix the Code.</p>
+  </div>
+
+  <div class="main-layout">
+    
+    <div class="sidebar">
+      
+      <div class="generator-box">
+        <h3>New Investigation</h3>
+        
+        <div class="input-row">
+          <input type="text" placeholder="Topic (e.g. Recursion)" [(ngModel)]="newTopic">
+        </div>
+
+        <div class="row-group">
+          <div class="select-wrapper">
+              <label>Language</label>
+              <select [(ngModel)]="selectedLanguage">
+                  <option value="Java">Java</option>
+                  <option value="Python">Python</option>
+                  <option value="C++">C++</option>
+              </select>
+          </div>
+          
+          <div class="select-wrapper">
+              <label>Difficulty</label>
+              <select [(ngModel)]="selectedDifficulty">
+                  <option value="Easy">Easy</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Hard">Hard</option>
+              </select>
+          </div>
+        </div>
+
+        <button class="gen-btn" (click)="generateCase()" [disabled]="isGenerating">
+          {{ isGenerating ? 'Consulting AI...' : '+ Generate Case' }}
+        </button>
+      </div>
+
+      <h3>Active Cases</h3>
+      <div class="case-file" *ngFor="let c of challenges" (click)="selectChallenge(c)" [class.active]="currentChallenge?.id === c.id">
+        <div class="case-header">
+          <span class="diff-tag" [ngClass]="c.difficulty.toLowerCase()">{{ c.difficulty }}</span>
+          <span class="bug-count">🐞 {{ c.bugsCount }} Bug{{ c.bugsCount > 1 ? 's' : '' }}</span>
+        </div>
+        <h4>{{ c.title }}</h4>
+      </div>
+    </div>
+
+    <div class="workspace" *ngIf="currentChallenge">
+      
+      <div class="case-details">
+        <h2>{{ currentChallenge.title }}</h2>
+        <p>{{ currentChallenge.description }}</p>
+        
+        <span class="bug-badge" [ngClass]="currentChallenge.difficulty.toLowerCase()">
+          Mission: Find {{ currentChallenge.bugsCount }} Bug{{ currentChallenge.bugsCount > 1 ? 's' : '' }}
+        </span>
+      </div>
+
+      <div class="editor-box">
+        <div class="editor-header">
+          <span>{{ selectedLanguage }} Source Code</span>
+        </div>
+        <textarea [(ngModel)]="currentCode" spellcheck="false"></textarea>
+      </div>
+
+      <div class="actions">
+          <div class="result-msg" [class.success]="lastResult === 'success'" [class.fail]="lastResult === 'fail'" *ngIf="message">
+              {{ message }}
+          </div>
+
+          <div class="buttons">
+              <button class="submit-btn" (click)="submitCode()" *ngIf="lastResult !== 'success'">
+                  ✅ Submit Fix
+              </button>
+              
+              <button class="next-btn" (click)="generateCase()" *ngIf="lastResult === 'success'">
+                  Next {{ selectedDifficulty }} Case ➡
+              </button>
+          </div>
+      </div>
+    </div>
+
+    <div class="workspace empty" *ngIf="!currentChallenge">
+      <div class="placeholder">
+        <h1>?</h1>
+        <p>No Active Investigation</p>
+        <span class="sub-text">Configure a topic and generate a case to begin.</span>
+      </div>
+    </div>
+
+  </div>
+</div>
