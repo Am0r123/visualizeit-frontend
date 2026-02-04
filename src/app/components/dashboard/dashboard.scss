@@ -1,0 +1,161 @@
+/* --- VARIABLES --- */
+$dark-bg: #050b14;
+$card-bg: #0b1120;
+$electric-blue: #00f2ff;
+$neon-purple: #bc13fe;
+$neon-green: #0aff60;
+$text-muted: #8892b0;
+$error-red: #ff4444;
+
+.dashboard-container {
+  padding: 40px;
+  background-color: $dark-bg;
+  min-height: 100vh;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.header {
+  margin-bottom: 40px;
+  h1 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; }
+  .highlight { color: $electric-blue; text-shadow: 0 0 15px rgba(0, 242, 255, 0.4); }
+  p { color: $text-muted; }
+}
+
+.loader {
+  color: $electric-blue; margin-top: 20px; font-size: 1.2rem;
+}
+
+.error-box {
+  border: 1px solid $error-red;
+  background: rgba($error-red, 0.1);
+  color: $error-red;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  h3 { margin-top: 0; }
+}
+
+/* --- GRID STATS --- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background: $card-bg;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 25px;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    border-color: rgba($electric-blue, 0.3);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+
+  .icon-box {
+    width: 45px; height: 45px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 15px;
+    
+    &.blue { background: rgba($electric-blue, 0.1); color: $electric-blue; }
+    &.purple { background: rgba($neon-purple, 0.1); color: $neon-purple; }
+    &.green { background: rgba($neon-green, 0.1); color: $neon-green; }
+    &.cyan { background: rgba(0, 255, 255, 0.1); color: cyan; }
+  }
+
+  .info {
+    h3 { font-size: 0.9rem; color: $text-muted; margin: 0; font-weight: 500; }
+    .number { font-size: 2rem; font-weight: 700; color: white; display: block; margin-top: 5px; }
+  }
+
+  .progress-bar {
+    height: 4px; background: #1f2937; margin-top: 20px; border-radius: 2px;
+    .fill { height: 100%; border-radius: 2px; box-shadow: 0 0 10px currentColor; }
+    .blue-fill { background: $electric-blue; color: $electric-blue; }
+    .purple-fill { background: $neon-purple; color: $neon-purple; }
+    .green-fill { background: $neon-green; color: $neon-green; }
+    .cyan-fill { background: cyan; color: cyan; }
+  }
+}
+
+/* --- RECENT HISTORY LIST --- */
+.history-section {
+  background: $card-bg;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 30px;
+}
+
+.section-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;
+  h2 { font-size: 1.2rem; margin: 0; }
+  .view-all { color: $electric-blue; text-decoration: none; font-size: 0.9rem; font-weight: 600; }
+}
+
+.history-list {
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+/* 🟢 UPDATED HISTORY ROW WITH HOVER EFFECT */
+.history-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent; /* Invisible border prevents jumping */
+  border-radius: 8px;
+  align-items: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  /* HOVER START */
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-3px); /* Lifts up */
+    border-color: rgba(0, 242, 255, 0.4); /* Blue Border */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 
+                0 0 10px rgba(0, 242, 255, 0.1); /* Glow */
+
+    /* Icon Glow */
+    .activity-name mat-icon {
+      color: $electric-blue;
+      text-shadow: 0 0 8px rgba(0, 242, 255, 0.6);
+    }
+  }
+  /* HOVER END */
+
+  &.header-row {
+    background: transparent;
+    color: $text-muted;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: none;
+    box-shadow: none;
+    cursor: default;
+
+    &:hover {
+      transform: none;
+      background: transparent;
+    }
+  }
+
+  .activity-name {
+    display: flex; align-items: center; gap: 12px; color: white; font-weight: 500;
+    mat-icon { color: $text-muted; font-size: 20px; transition: color 0.3s ease; }
+  }
+
+  .date { color: $text-muted; font-size: 0.9rem; }
+
+  .badge {
+    padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; width: fit-content;
+    &.completed { background: rgba($electric-blue, 0.1); color: $electric-blue; border: 1px solid rgba($electric-blue, 0.2); }
+    &.pending { background: rgba(255, 165, 0, 0.1); color: orange; border: 1px solid rgba(255, 165, 0, 0.2); }
+  }
+}

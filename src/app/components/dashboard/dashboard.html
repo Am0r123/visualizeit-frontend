@@ -1,0 +1,78 @@
+<div class="dashboard-container">
+  
+  <div class="header">
+    <h1>Welcome back, <span class="highlight">Student</span></h1>
+    <p>Here is your learning progress overview.</p>
+  </div>
+
+  <div *ngIf="isLoading" class="loader">Loading stats...</div>
+
+  <div class="stats-grid" *ngIf="stats">
+    
+    <div class="stat-card">
+      <div class="icon-box blue"><mat-icon>emoji_events</mat-icon></div>
+      <div class="info">
+        <h3>Challenges</h3>
+        <span class="number">{{ stats.challengesCompleted }}</span>
+      </div>
+      <div class="progress-bar"><div class="fill blue-fill" style="width: 70%"></div></div>
+    </div>
+
+    <div class="stat-card">
+      <div class="icon-box purple"><mat-icon>leaderboard</mat-icon></div>
+      <div class="info">
+        <h3>Class Rank</h3>
+        <span class="number">#{{ stats.studentRank }}</span>
+      </div>
+      <div class="progress-bar"><div class="fill purple-fill" style="width: 85%"></div></div>
+    </div>
+
+    <div class="stat-card">
+      <div class="icon-box green"><mat-icon>trending_up</mat-icon></div>
+      <div class="info">
+        <h3>Total Score</h3>
+        <span class="number">{{ stats.totalScore }} XP</span>
+      </div>
+      <div class="progress-bar"><div class="fill green-fill" style="width: 60%"></div></div>
+    </div>
+
+    <div class="stat-card">
+      <div class="icon-box cyan"><mat-icon>layers</mat-icon></div>
+      <div class="info">
+        <h3>Levels Done</h3>
+        <span class="number">{{ stats.levelsCompleted }}</span>
+      </div>
+      <div class="progress-bar"><div class="fill cyan-fill" style="width: 40%"></div></div>
+    </div>
+
+  </div>
+
+  <div class="history-section" *ngIf="stats">
+    <div class="section-header">
+      <h2>Recent History</h2>
+      <a routerLink="/history" class="view-all">View All →</a>
+    </div>
+
+    <div class="history-list">
+      <div class="history-row header-row">
+        <span>ACTIVITY</span>
+        <span>DATE</span>
+        <span>STATUS</span>
+      </div>
+      
+
+      <div class="history-row" *ngFor="let item of stats.recentHistory">
+        <div class="activity-name">
+          <mat-icon>code</mat-icon> {{ item.title }}
+        </div>
+        <div class="date">{{ item.date }}</div>
+        <div class="status">
+          <span class="badge" [ngClass]="item.status === 'Completed' ? 'completed' : 'pending'">
+            {{ item.status }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
