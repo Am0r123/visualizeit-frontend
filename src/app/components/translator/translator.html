@@ -1,0 +1,79 @@
+<div class="translator-container">
+  
+  <div class="header-section">
+    <h1><mat-icon>translate</mat-icon> Code Translator</h1>
+    <p>Convert algorithms instantly between languages.</p>
+  </div>
+
+  <div class="main-layout">
+    
+    <div class="error-banner" *ngIf="errorMessage">
+      <mat-icon>warning</mat-icon> {{ errorMessage }}
+    </div>
+
+    <div class="controls-bar">
+      
+      <div class="select-group">
+        <label>From:</label>
+        <select [(ngModel)]="sourceLang">
+          <option value="detect">✨ Auto Detect</option>
+          <option *ngFor="let lang of languages" [value]="lang.value">{{ lang.label }}</option>
+        </select>
+      </div>
+
+      <div class="exchange-icon">
+        <mat-icon>arrow_forward</mat-icon>
+      </div>
+
+      <div class="select-group">
+        <label>To:</label>
+        <select [(ngModel)]="targetLang">
+          <option *ngFor="let lang of languages" [value]="lang.value">{{ lang.label }}</option>
+        </select>
+      </div>
+
+      <button class="translate-btn" (click)="translateCode()" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Translate</span>
+        <span *ngIf="isLoading">Processing...</span>
+      </button>
+
+    </div>
+
+    <div class="editors-grid">
+      
+      <div class="editor-box">
+        <div class="editor-header">Input Code</div>
+        <textarea 
+          [(ngModel)]="inputCode" 
+          placeholder="Paste your source code here..." 
+          spellcheck="false">
+        </textarea>
+      </div>
+
+      <div class="editor-box output">
+        <div class="editor-header">
+          <span>Output Code</span>
+          <button class="icon-btn" (click)="copyToClipboard()" *ngIf="outputCode" title="Copy">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+        </div>
+        
+        <div class="textarea-wrapper">
+          <div class="loader-overlay" *ngIf="isLoading">
+            <div class="spinner"></div>
+            <span>Translating...</span>
+          </div>
+          
+          <textarea 
+            [(ngModel)]="outputCode" 
+            readonly 
+            placeholder="Translation will appear here..."
+            spellcheck="false">
+          </textarea>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
