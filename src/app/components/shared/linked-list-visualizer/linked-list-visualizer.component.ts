@@ -14,7 +14,7 @@ interface NodeUI {
     .ll-container {
       display: flex;
       align-items: center;
-      justify-content: center; /* <--- CENTERS THE LIST */
+      justify-content: center;
       padding: 40px 20px;
       overflow-x: auto;
       height: 100%;
