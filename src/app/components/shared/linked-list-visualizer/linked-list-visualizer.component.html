@@ -1,0 +1,21 @@
+<div class="ll-container">
+  <div class="node-group" *ngFor="let node of nodes; let i = index">
+    <div class="node" [class.highlight]="hasPointer(node.id)">
+      <div class="value">{{ node.val }}</div>
+      <div class="pointers">
+        <div *ngFor="let p of getPointers(node.id)" class="pointer-label">
+          {{ p }} ↓
+        </div>
+      </div>
+    </div>
+
+    <div class="connector" *ngIf="i < nodes.length - 1">
+      <span *ngIf="isDoubleLink(i)" class="arrow double">⇄</span>
+      <span *ngIf="!isDoubleLink(i) && hasNextLink(i)" class="arrow">→</span>
+      <span *ngIf="!isDoubleLink(i) && !hasNextLink(i)" class="arrow dim"
+        >...</span
+      >
+    </div>
+
+  </div>
+</div>
