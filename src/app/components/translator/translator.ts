@@ -8,8 +8,6 @@ import { TranslatorService } from '../../services/translator/translator.service'
 
 @Component({
   selector: 'app-translator',
-  standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule],
   templateUrl: './translator.html',
   styleUrls: ['./translator.scss']
 })

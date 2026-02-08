@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-
+import { AuthService } from '../../../services/auth/auth.service';
 @Component({
   selector: 'app-side-bar',
   templateUrl: './side-bar.component.html',
@@ -9,10 +9,13 @@ export class SideBarComponent implements OnInit {
   isCollapsed = false;
   showSortingDropdown = false;
   showSearchingDropdown = false;
+  isLoggedIn = false;
 
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isLoggedIn = this.authService.isLoggedIn();
+  }
 
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
@@ -33,6 +36,13 @@ export class SideBarComponent implements OnInit {
     event.stopPropagation();
     if (!this.isCollapsed) {
       this.showSearchingDropdown = !this.showSearchingDropdown;
+    }
+  }
+
+  handleAuthAction() {
+    if (this.isLoggedIn) {
+      this.authService.logout(); 
+      this.isLoggedIn = false;
     }
   }
 

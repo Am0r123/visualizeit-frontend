@@ -1,0 +1,165 @@
+/* --- VARIABLES --- */
+$dark-bg: #050b14;
+$sidebar-bg: #0b1120;
+$electric-blue: #00f2ff;
+$text-main: #ffffff;
+$text-muted: #8892b0;
+$hover-bg: rgba(0, 242, 255, 0.1);
+$danger: #ff4d4d;
+
+.sidebar {
+  width: 240px;
+  height: 100vh;
+  background: $sidebar-bg;
+  color: $text-main;
+  display: flex;
+  flex-direction: column; /* Key for pushing footer down */
+  transition: width 0.3s ease;
+  border-right: 1px solid rgba($electric-blue, 0.1);
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap; /* Prevents text wrapping during collapse */
+
+  /* --- COLLAPSED STATE --- */
+  &.collapsed {
+    width: 70px;
+    
+    .sidebar-header {
+      min-height: 70px; /* Shrink header */
+      padding: 0;       /* Remove padding */
+      
+      /* Reset toggle button to standard flow when collapsed */
+      .toggle-btn {
+        position: static;
+        margin: 0 auto;
+      }
+    }
+
+    /* Center icons in footer when collapsed */
+    .sidebar-footer a {
+      justify-content: center;
+      padding: 1rem 0;
+    }
+    
+    /* Center menu icons */
+    .menu li a {
+      justify-content: center;
+      padding: 1rem 0;
+    }
+  }
+
+  /* --- HEADER & LOGO --- */
+  .sidebar-header {
+    position: relative; /* Needed for absolute positioning of toggle */
+    display: flex;
+    justify-content: center; /* Horizontally center the logo */
+    align-items: center;     /* Vertically center content */
+    padding: 2rem 1rem;      /* More vertical space for a big logo */
+    min-height: 140px;       /* Reserve height for the big logo */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+
+    .logo {
+      /* 🟢 UPDATED: Much bigger and centered */
+      width: 120px; /* Adjust this value to make it even bigger */
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 0 12px rgba($electric-blue, 0.5)); /* Glow */
+      transition: all 0.3s ease;
+    }
+
+    .toggle-btn {
+      /* 🟢 UPDATED: Floating button so it doesn't push the logo */
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      
+      background: transparent;
+      border: none;
+      color: $text-muted;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 10;
+      transition: color 0.3s;
+      
+      &:hover { color: $electric-blue; }
+    }
+  }
+
+  /* --- MENU ITEMS --- */
+  .menu {
+    list-style: none;
+    padding: 10px 0;
+    margin: 0;
+    overflow-y: auto; /* Allows menu to scroll if screen is short */
+
+    li a {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 1rem 1.5rem;
+      color: $text-muted;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+
+      &:hover {
+        background: $hover-bg;
+        color: $electric-blue;
+        border-left: 3px solid $electric-blue;
+        mat-icon { color: $electric-blue; }
+      }
+
+      &.active {
+        background: linear-gradient(90deg, rgba($electric-blue, 0.15) 0%, transparent 100%);
+        color: $electric-blue;
+        border-left: 3px solid $electric-blue;
+        mat-icon { color: $electric-blue; }
+      }
+
+      mat-icon {
+        font-size: 1.3rem;
+        width: 24px;
+        height: 24px;
+        color: $text-muted;
+        transition: all 0.3s ease;
+      }
+      
+      span { font-weight: 500; font-size: 0.95rem; }
+    }
+  }
+
+  /* --- FOOTER (Sign In / Logout) --- */
+  .sidebar-footer {
+    margin-top: auto; /* Pushes this section to the very bottom */
+    padding: 10px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+    a {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 1rem 1.5rem;
+      color: $text-muted;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+
+      mat-icon {
+        font-size: 1.3rem;
+        width: 24px;
+        height: 24px;
+      }
+
+      &:hover {
+        background: rgba($danger, 0.1); /* Reddish tint for logout action */
+        color: $danger; 
+        border-left: 3px solid $danger;
+        mat-icon { color: $danger; }
+      }
+    }
+  }
+}
