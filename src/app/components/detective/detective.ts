@@ -7,8 +7,8 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-detective',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './detective.html',
-  styleUrls: ['./detective.scss']
+  templateUrl: './detective.component.html',
+  styleUrls: ['./detective.component.scss']
 })
 export class DetectiveComponent implements OnInit {
   challenges: any[] = [];
@@ -17,9 +17,10 @@ export class DetectiveComponent implements OnInit {
   message: string = '';
   lastResult: string = '';
   
-  newTopic: string = '';
+  // Dropdown Selections
+  selectedStructure: string = 'Array';
+  selectedLanguage: string = 'Java';
   selectedDifficulty: string = 'Medium';
-  selectedLanguage: string = 'Java'; // 🟢 Matches Dropdown
   isGenerating: boolean = false;
 
   constructor(private http: HttpClient) {}
@@ -29,8 +30,9 @@ export class DetectiveComponent implements OnInit {
   }
 
   refreshList() {
-    this.http.get<any[]>('http://localhost:8080/api/detective/challenges').subscribe(data => {
-      this.challenges = data;
+    this.http.get<any[]>('http://localhost:8080/api/detective/challenges').subscribe({
+        next: (data) => this.challenges = data,
+        error: (err) => console.error("Could not fetch cases", err)
     });
   }
 
@@ -46,7 +48,7 @@ export class DetectiveComponent implements OnInit {
     this.message = ''; 
 
     const payload = {
-        topic: this.newTopic || 'Random',
+        dataStructure: this.selectedStructure, // Send structure to backend
         difficulty: this.selectedDifficulty,
         language: this.selectedLanguage
     };
@@ -58,7 +60,7 @@ export class DetectiveComponent implements OnInit {
         this.isGenerating = false;
       },
       error: () => {
-        alert("AI Failed to generate. Try again.");
+        alert("AI Failed to generate. Backend might be offline.");
         this.isGenerating = false;
       }
     });
