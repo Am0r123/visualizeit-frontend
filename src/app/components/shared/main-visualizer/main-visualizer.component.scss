@@ -1,0 +1,171 @@
+.main-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: auto;
+  padding: 20px;
+  color: #eee;
+  font-family: Arial, sans-serif;
+  transition: all 0.3s ease;
+}
+
+h4 { margin: 0 0 10px 0; color: #fff; }
+
+.visualizer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* --- STAGE --- */
+.array-section {
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  height: 350px; 
+  width: 100%;
+  background: #1b1b1b;
+  border: 1px solid #333;
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.stage-content { width: 100%; height: 100%; display: flex; justify-content: center; align-items: flex-end; }
+.placeholder-msg { color: #555; align-self: center; font-size: 1.2rem; }
+
+app-tree-visualizer, app-linked-list-visualizer, app-array-visualizer { width: 100%; height: 100%; }
+
+/* --- CONTROLS --- */
+.controls { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+button { padding: 6px 12px; background: #007acc; border: none; border-radius: 5px; color: white; cursor: pointer; transition: 0.2s; }
+button:hover:not(:disabled) { background: #005fa3; transform: scale(1.03); }
+button:disabled { background: #555; cursor: not-allowed; opacity: 0.5; }
+.speed-control { display: flex; align-items: center; gap: 5px; }
+
+/* --- CODE AREA --- */
+.code-and-controls { display: flex; align-items: flex-start; gap: 20px; width: 100%; justify-content: center; }
+.code-section { display: flex; flex-direction: column; flex: 1; position: relative; }
+
+/* Progress Bar (Top of Editor) */
+.code-progress-container {
+  width: 100%;
+  height: 24px;
+  background: #2a2a2a;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #444;
+  border-bottom: none;
+}
+.code-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4caf50, #76ff03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.35s ease;
+}
+.progress-text { position: absolute; width: 100%; text-align: center; color: #fff; font-weight: bold; font-size: 12px; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
+
+/* Editor Styles */
+textarea.code-editor, .code-block {
+  width: 100%;
+  height: 400px;
+  background: #1e1e1e;
+  color: #ccc;
+  padding: 10px;
+  border-radius: 0 0 5px 5px; /* Bottom rounded only if progress bar exists */
+  border: 1px solid #444;
+  font-family: 'Consolas', monospace;
+  font-size: 14px;
+  overflow: auto;
+  box-sizing: border-box;
+  line-height: 20px;
+}
+/* If no progress bar, round top corners */
+.code-section textarea.code-editor:first-child { border-radius: 5px; }
+
+.code-line-row { display: flex; align-items: center; height: 20px; line-height: 20px; }
+.code-line-row.highlight { background: rgba(255, 255, 0, 0.15); border-left: 3px solid #ffeb3b; }
+.code-line-row.error-line { background: rgba(255, 0, 0, 0.25); border-left: 3px solid #ff5252; }
+
+.line-number { width: 35px; text-align: right; margin-right: 10px; color: #666; border-right: 1px solid #333; user-select: none; }
+.line-text { white-space: pre; flex: 1; }
+
+/* --- STATUS PANEL --- */
+.status-panel { background: #111; border: 1px solid #333; padding: 15px; width: 280px; border-radius: 6px; display: flex; flex-direction: column; gap: 15px; }
+.status-box { background: #1b1b1b; padding: 10px; border-radius: 6px; border: 1px solid #333; }
+.status-item { margin-bottom: 8px; font-size: 14px; }
+
+/* Progress Bar (Sidebar) */
+.progress-row { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
+.progress { flex: 1; height: 6px; background: #333; border-radius: 6px; overflow: hidden; }
+.progress .bar { height: 100%; background: #4caf50; }
+.percent { font-size: 12px; font-weight: bold; }
+
+/* Errors */
+.errors-panel { background: #251010; padding: 10px; border-radius: 6px; border: 1px solid #522; max-height: 150px; overflow-y: auto; }
+.error-list { padding-left: 15px; margin: 0; font-size: 13px; color: #ff8888; }
+.critical-error { color: #ff4444; font-weight: bold; }
+
+.primary-button { width: 100%; padding: 10px; font-weight: bold; margin-bottom: 5px;}
+.secondary-button { width: 100%; background: #444; }
+
+
+/* --- ⚡ COMPACT MODE --- */
+.main-container.compact-view {
+  padding: 5px;
+  
+  .visualizer { gap: 8px; }
+  .array-section { height: 200px; border-radius: 4px; }
+  
+  .controls {
+    gap: 4px;
+    button { padding: 2px 6px; font-size: 11px; }
+    .speed-control { font-size: 11px; }
+    input[type=range] { width: 50px; }
+  }
+
+  .code-and-controls {
+    flex-direction: column-reverse; 
+    gap: 8px;
+  }
+
+  .code-section { width: 100%; }
+
+  /* Compact Editor */
+  .code-progress-container { height: 4px; border-radius: 4px 4px 0 0; }
+  .progress-text { display: none; } /* Hide text in compact bar */
+  
+  textarea.code-editor, .code-block {
+    height: 150px; 
+    font-size: 11px; 
+    line-height: 14px;
+    padding: 5px;
+  }
+  
+  .code-line-row { height: 14px; line-height: 14px; }
+  .line-number { width: 25px; margin-right: 5px; }
+
+  /* Compact Status Panel */
+  .status-panel {
+    width: 100%;
+    padding: 5px;
+    flex-direction: row; 
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    
+    .status-box { 
+      padding: 4px; display: flex; gap: 10px; border: none; background: transparent; 
+      h4 { display: none; }
+      .progress-row { display: none; } /* Hide sidebar progress in compact, rely on top bar */
+    }
+    
+    .errors-panel { display: none; } /* Too small for errors in compare mode usually */
+    
+    .actions-group { width: auto; display: flex; gap: 5px; }
+    button { width: auto; padding: 3px 8px; font-size: 11px; }
+  }
+}
