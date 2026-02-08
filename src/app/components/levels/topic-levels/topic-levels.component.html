@@ -15,11 +15,10 @@
       
       <div class="level-info">
         <span class="status-icon">
-          <span *ngIf="level.levelNumber < unlockedLevel" style="color: #00ff88;">✔</span>
-          <span *ngIf="level.levelNumber === unlockedLevel" style="color: #00f2ff;">●</span>
-          <span *ngIf="level.levelNumber > unlockedLevel" style="color: #4a5568;">🔒</span>
+          <span *ngIf="level.levelNumber < unlockedLevel" style="color: #00ff88;">Done</span>
+          <span *ngIf="level.levelNumber === unlockedLevel" style="color: #00f2ff;">Current</span>
+          <span *ngIf="level.levelNumber > unlockedLevel" style="color: #4a5568;">Locked</span>
         </span>
-
         <span class="level-title">Level {{ level.levelNumber }}: {{ level.title }}</span>
       </div>
     </button>
@@ -28,19 +27,29 @@
   <div class="workspace" *ngIf="!isLoading && selectedLevel">
     <div>
       <h2>{{ selectedLevel.title }}</h2>
-      <p class="instruction">{{ selectedLevel.question }}</p>
       
-      <div class="code-preview">{{ selectedLevel.codeSnippet }}</div>
+      <p class="instruction">{{ selectedLevel.question }}</p>
 
-      <textarea [(ngModel)]="userAnswer" placeholder="// Type your solution here..."></textarea>
+      <app-main-visualizer (codeChange)="handleCodeFromChild($event)"></app-main-visualizer>
       
       <div class="actions">
-        <button class="btn-submit" (click)="submitAnswer()">Submit Code</button>
+        <app-smart-hint [currentCode]="userAnswer" [currentTopic]="topicId"></app-smart-hint>
+
+        <button class="btn-submit" 
+                (click)="submitAnswer()" 
+                [disabled]="isChecking">
+          <span *ngIf="!isChecking">Submit Code</span>
+          <span *ngIf="isChecking">Analyzing...</span>
+        </button>
       </div>
 
-      <div *ngIf="showSuccess" class="success-message">
-        <span>🎉 Excellent! System updated. Next level unlocked.</span>
+      <div *ngIf="feedbackMessage" 
+           class="feedback-box" 
+           [ngClass]="{'success': showSuccess, 'error': !showSuccess}">
+        <span class="icon"></span> 
+        <span>{{ feedbackMessage }}</span>
       </div>
+
     </div>
   </div>
 </div>

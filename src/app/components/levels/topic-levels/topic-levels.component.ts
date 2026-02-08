@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { LevelsDataService } from 'src/app/services/levels-data/levels-data.service'; 
 
 @Component({
@@ -14,26 +15,29 @@ export class TopicLevelsComponent implements OnInit {
   
   unlockedLevel: number = 1; 
   userAnswer: string = '';
+  
+  // ✅ UI States for AI Feedback
   showSuccess: boolean = false;
+  isChecking: boolean = false; 
+  feedbackMessage: string = ''; 
   isLoading: boolean = true; 
 
   constructor(
     private route: ActivatedRoute,
-    private levelsDataService: LevelsDataService // ✅ Inject Service
+    private levelsDataService: LevelsDataService,
+    private toaster: ToastrService
   ) {}
 
   ngOnInit(): void {
     this.topicId = this.route.snapshot.paramMap.get('id');
 
     if (this.topicId) {
-      // ✅ CALL BACKEND INSTEAD OF LOCAL ARRAY
       this.levelsDataService.getLevels(this.topicId).subscribe({
         next: (data) => {
           this.currentLevels = data;
           this.isLoading = false;
           this.loadProgress();
 
-          // Select the highest unlocked level automatically
           const levelToSelect = this.currentLevels.find(l => l.levelNumber === this.unlockedLevel) || this.currentLevels[0];
           this.selectLevel(levelToSelect);
         },
@@ -58,30 +62,61 @@ export class TopicLevelsComponent implements OnInit {
     }
     this.selectedLevel = level;
     this.userAnswer = '';
+    
+    // Reset feedback states
     this.showSuccess = false;
+    this.feedbackMessage = '';
   }
 
   submitAnswer() {
-    if (this.userAnswer.trim().length > 0 && this.selectedLevel) { 
-      
-      this.showSuccess = true;
-
-      // Unlock Next Level locally
-      if (this.selectedLevel.levelNumber === this.unlockedLevel && this.unlockedLevel < this.currentLevels.length) {
-        this.unlockedLevel++;
-        localStorage.setItem(`${this.topicId}_progress`, this.unlockedLevel.toString());
-      }
-
-      // ✅ SAVE ANSWER TO DATABASE
-      const userId = 1; 
-      this.levelsDataService.saveAnswer(userId, this.selectedLevel.id, this.userAnswer)
-        .subscribe({
-          next: (res) => console.log('Saved:', res),
-          error: (err) => console.error('Error:', err)
-        });
-
-    } else {
-      alert("Please enter a valid answer.");
+    if (!this.userAnswer.trim() || !this.selectedLevel) { 
+      this.toaster.warning("Please type some code first.");
+      return;
     }
+
+    // 1. Set Loading State
+    this.isChecking = true;
+    this.showSuccess = false;
+    this.feedbackMessage = "🤖 AI is analyzing your logic...";
+
+    const userId = 1; // Hardcoded for now
+
+    // 2. Call the Backend (AI Check)
+    // Make sure your service has 'submitAnswer' (or 'saveAnswer' if you didn't rename it)
+    this.levelsDataService.submitAnswer(userId, this.selectedLevel.id, this.userAnswer)
+      .subscribe({
+        next: (res: any) => {
+          this.isChecking = false;
+
+          // 3. Handle AI Response
+          if (res.success) {
+            // ✅ SUCCESS
+            this.showSuccess = true;
+            this.feedbackMessage = res.message; // "Correct! Next level unlocked."
+            this.toaster.success("Great job! AI verified your code.");
+
+            // Unlock Next Level (Only if we are at the latest unlocked level)
+            if (this.selectedLevel.levelNumber === this.unlockedLevel && this.unlockedLevel < this.currentLevels.length) {
+              this.unlockedLevel++;
+              localStorage.setItem(`${this.topicId}_progress`, this.unlockedLevel.toString());
+            }
+
+          } else {
+            // ❌ FAIL
+            this.showSuccess = false;
+            this.feedbackMessage = res.message; // "Incorrect. AI says..."
+            this.toaster.error("Incorrect. Check the feedback!");
+          }
+        },
+        error: (err) => {
+          this.isChecking = false;
+          console.error('Error:', err);
+          this.toaster.error("Server error. Could not check code.");
+        }
+      });
+  }
+
+  handleCodeFromChild(code: string) {
+    this.userAnswer = code;
   }
 }
