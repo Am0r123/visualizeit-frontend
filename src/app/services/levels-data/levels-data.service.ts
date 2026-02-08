@@ -6,23 +6,25 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class LevelsDataService {
-  private baseUrl = 'http://localhost:8080/api'; 
+  private apiUrl = 'http://localhost:8080/api'; // Base URL
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  // ✅ ADDED THIS: Fetches the list of topics (Arrays, Sorting, etc.)
-  getTopics(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/topics`);
+  getTopics() {
+    return this.http.get<any[]>(`${this.apiUrl}/topics`);
   }
 
-  // Fetches the specific levels for a topic (e.g., levels/arrays)
-  getLevels(topicSlug: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/levels/${topicSlug}`);
+  getLevels(topicSlug: string) {
+    return this.http.get<any[]>(`${this.apiUrl}/levels/${topicSlug}`);
   }
 
-  // Saves the user's answer
-  saveAnswer(userId: number, levelId: number, code: string): Observable<any> {
-    const payload = { userId, levelId, code };
-    return this.http.post(`${this.baseUrl}/submit`, payload, { responseType: 'text' });
+  // ✅ NEW: Submit Code for AI Grading
+  submitAnswer(userId: number, levelId: number, code: string): Observable<any> {
+    const payload = {
+      userId: userId,
+      levelId: levelId,
+      code: code
+    };
+    return this.http.post(`${this.apiUrl}/submit`, payload);
   }
 }
