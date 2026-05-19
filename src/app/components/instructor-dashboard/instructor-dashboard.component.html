@@ -1,0 +1,74 @@
+<div class="dashboard-container">
+  
+  <div class="header">
+    <h1>Welcome back, <span class="highlight"> {{username}}</span></h1>
+    <p>Here is your teaching and content overview.</p>
+  </div>
+
+  <div class="stats-grid">
+    
+    <div class="stat-card">
+      <div class="icon-box blue"><mat-icon>groups</mat-icon></div>
+      <div class="info">
+        <h3>Total Students</h3>
+        <span class="number">{{ stats.totalStudents }}</span>
+      </div>
+      <div class="progress-bar"><div class="fill blue-fill" style="width: 100%"></div></div>
+    </div>
+
+    <div class="stat-card">
+      <div class="icon-box purple"><mat-icon>library_books</mat-icon></div>
+      <div class="info">
+        <h3>Active Topics</h3>
+        <span class="number">{{ stats.activeTopics }}</span>
+      </div>
+      <div class="progress-bar"><div class="fill purple-fill" style="width: 100%"></div></div>
+    </div>
+
+    <div class="stat-card">
+      <div class="icon-box green"><mat-icon>auto_awesome</mat-icon></div>
+      <div class="info">
+        <h3>Levels Gen</h3>
+        <span class="number">{{ stats.totalLevels }}</span>
+      </div>
+      <div class="progress-bar"><div class="fill green-fill" style="width: 100%"></div></div>
+    </div>
+
+    <div class="stat-card">
+      <div class="icon-box cyan"><mat-icon>emoji_events</mat-icon></div>
+      <div class="info">
+        <h3>Weekly Challenges</h3>
+        <span class="number">{{ stats.totalWeeklyChallenges }}</span>
+      </div>
+      <div class="progress-bar"><div class="fill cyan-fill" style="width: 100%"></div></div>
+    </div>
+
+  </div>
+
+  <div class="history-section">
+    <div class="section-header">
+      <h2>Recent Content Generated</h2>
+    </div>
+
+    <div class="history-list">
+      <div class="history-row header-row">
+        <span>TOPIC</span>
+        <span>LEVEL TITLE</span>
+        <span>STATUS</span>
+      </div>
+      
+      <div class="history-row">
+        <div class="activity-name"><mat-icon>folder</mat-icon> Arrays</div>
+        <div class="date">Declare Array</div>
+        <div class="status"><span class="badge completed">Published</span></div>
+      </div>
+      
+      <div class="history-row">
+        <div class="activity-name"><mat-icon>folder</mat-icon> Sorting</div>
+        <div class="date">Bubble Sort Pass</div>
+        <div class="status"><span class="badge completed">Published</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
