@@ -42,10 +42,16 @@
     <div class="editors-grid">
       
       <div class="editor-box">
-        <div class="editor-header">Input Code</div>
+        <div class="editor-header">
+          <span>Input Code</span>
+          <input type="file" #fileUpload (change)="onFileSelected($event)" accept=".txt,.java,.py,.cpp,.c,.cs,.js" style="display: none;">
+          <button class="icon-btn" (click)="fileUpload.click()" title="Upload File">
+            <mat-icon>upload_file</mat-icon>
+          </button>
+        </div>
         <textarea 
           [(ngModel)]="inputCode" 
-          placeholder="Paste your source code here..." 
+          placeholder="Paste your source code here, or upload a file..." 
           spellcheck="false">
         </textarea>
       </div>

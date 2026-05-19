@@ -30,7 +30,6 @@ $error-red: #ff4444;
   margin: 0 auto;
 }
 
-/* 🟢 NEW: Error Banner Styles */
 .error-banner {
   background: rgba($error-red, 0.15);
   border: 1px solid rgba($error-red, 0.4);
@@ -52,7 +51,6 @@ $error-red: #ff4444;
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- CONTROLS BAR --- */
 .controls-bar {
   display: flex;
   align-items: flex-end;
@@ -124,7 +122,6 @@ $error-red: #ff4444;
   }
 }
 
-/* --- EDITORS GRID --- */
 .editors-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -152,6 +149,7 @@ $error-red: #ff4444;
 
     .icon-btn {
       background: transparent; border: none; color: $electric-blue; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
       &:hover { color: white; transform: scale(1.1); }
     }
   }
@@ -172,7 +170,6 @@ $error-red: #ff4444;
   }
 }
 
-/* Output Specifics */
 .editor-box.output {
   border-color: rgba($electric-blue, 0.2);
   
