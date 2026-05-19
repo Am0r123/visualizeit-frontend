@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LevelsDataService } from 'src/app/services/levels-data/levels-data.service'; // ✅ Import Service
+import { LevelsDataService } from 'src/app/services/levels-data/levels-data.service';
 
 @Component({
   selector: 'app-levels',
@@ -14,23 +14,28 @@ export class LevelsComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private levelsDataService: LevelsDataService // ✅ Inject Service
+    private levelsDataService: LevelsDataService
   ) {}
 
   ngOnInit(): void {
-    // Fetch data from MySQL
     this.levelsDataService.getTopics().subscribe({
       next: (data) => {
-        // Map backend data to your UI structure
         this.topics = data.map((topic: any) => {
           return {
+            // ✅ CRITICAL FIX: Copy all database fields (id, name, title, slug) first!
+            ...topic, 
+            
+            // Then add your UI-specific fields
             color: '#0f1522', 
-            icon: 'assets/images/c-arrays.jpg',
             accent: this.getAccentColor(topic.slug),
-            tags: this.getTags(topic.slug)
+            tags: this.getTags(topic.slug),
+            tag: topic.slug
           };
         });
         this.isLoading = false;
+        
+        // Debug: Check if 'name' or 'title' is actually here now
+        console.log('Processed Topics:', this.topics); 
       },
       error: (err) => {
         console.error('Error loading topics:', err);
@@ -39,17 +44,16 @@ export class LevelsComponent implements OnInit {
     });
   }
 
-  // Helper to keep your Neon Theme alive
+  // ... rest of your helper methods (getAccentColor, getTags, openTopic) stay the same
   getAccentColor(slug: string): string {
     switch (slug) {
-      case 'arrays': return '#00f2ff';   // Cyan
-      case 'sorting': return '#00ff88';  // Green
-      case 'searching': return '#bd00ff';// Purple
-      default: return '#ffffff';         // White fallback
+      case 'arrays': return '#00f2ff';
+      case 'sorting': return '#00ff88';
+      case 'searching': return '#bd00ff';
+      default: return '#ffffff';
     }
   }
 
-  // Helper to add tags based on topic
   getTags(slug: string): string[] {
     switch (slug) {
       case 'arrays': return ['CS101', 'Basics'];
@@ -61,7 +65,6 @@ export class LevelsComponent implements OnInit {
 
   openTopic(topicSlug: string) {
     console.log('Navigating to:', topicSlug);
-    // ⚠️ IMPORTANT: We use 'slug' (e.g., 'arrays') for the URL, not the numeric ID
     this.router.navigate(['/levels', topicSlug]);
   }
 }

@@ -29,7 +29,10 @@
       <h2>{{ selectedLevel.title }}</h2>
       
       <p class="instruction">{{ selectedLevel.question }}</p>
-
+      <div class="code-snippet">
+        <h3>Code Snippet</h3>
+        <pre><code>{{ selectedLevel.codeSnippet }}</code></pre>
+      </div>
       <app-main-visualizer (codeChange)="handleCodeFromChild($event)"></app-main-visualizer>
       
       <div class="actions">

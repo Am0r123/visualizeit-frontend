@@ -1,0 +1,74 @@
+<div class="dashboard-container instructor-container">
+  
+  <div class="header">
+    <a routerLink="/instructor/topics" class="back-link">← Back to Topics</a>
+    <h2>Instructor Panel: {{ topicName }}</h2>
+  </div>
+
+  <div class="create-section">
+    <button (click)="toggleAddForm()" class="btn-main toggle-btn">
+      {{ showAddLevelForm ? 'Close Editor' : '+ Create New Level' }}
+    </button>
+
+    <div *ngIf="showAddLevelForm" class="editor-card">
+      
+      <div class="mode-toggle">
+        <button (click)="isAiMode = true" [class.active]="isAiMode">AI Assist ✨</button>
+        <button (click)="isAiMode = false" [class.active]="!isAiMode">Manual Entry ✍️</button>
+      </div>
+
+      <div *ngIf="isAiMode" class="ai-box">
+        <label>What should this level teach?</label>
+        <textarea [(ngModel)]="instructorAiPrompt" placeholder="e.g. A level about finding the smallest number in an array..."></textarea>
+        <button (click)="generateWithAI()" [disabled]="isGenerating" class="btn-main generate-btn">
+          {{ isGenerating ? 'Gemini is thinking...' : 'Generate Level' }}
+        </button>
+      </div>
+
+      <div class="form-box">
+        <input type="text" [(ngModel)]="newLevel.title" placeholder="Level Title">
+        <textarea [(ngModel)]="newLevel.question" class="question-input" placeholder="Question description..."></textarea>
+        <textarea [(ngModel)]="newLevel.codeSnippet" class="code-font" placeholder="Starting code..."></textarea>
+        
+        <button (click)="saveLevel()" class="btn-save">Confirm & Save to MySQL</button>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h3 class="section-title">Existing Levels</h3>
+  
+  <div *ngIf="isLoading" class="loader">Loading levels...</div>
+
+  <div class="stats-grid" *ngIf="!isLoading">
+    
+    <div class="stat-card level-card" *ngFor="let level of levels">
+      
+      <div class="card-actions">
+        <button class="action-btn edit-btn" (click)="editExistingLevel(level)" title="Edit Level">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button class="action-btn delete-btn" (click)="deleteLevel(level.id)" title="Delete Level">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <div class="icon-box purple">
+        <mat-icon>code</mat-icon>
+      </div>
+      
+      <div class="info">
+        <h4>Level {{ level.levelNumber || 'N/A' }} - {{ level.title }}</h4>
+        <p>
+          {{ (level.question?.length > 60) ? (level.question | slice:0:60) + '...' : level.question }}
+        </p>
+      </div>
+    </div>
+
+    <div *ngIf="levels.length === 0" class="empty-state">
+      No levels found for this topic. Open the editor above to create your first one!
+    </div>
+
+  </div>
+</div>

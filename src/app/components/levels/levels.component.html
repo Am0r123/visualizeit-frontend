@@ -14,12 +14,10 @@
          *ngFor="let topic of topics" 
          (click)="openTopic(topic.slug)" 
          [style.background-color]="topic.color">
-         
-      <div class="card-content">
-        <img class="topic-image" [src]="topic.icon" [alt]="topic.name" />
-        
+         <div class="card-content">
         <div class="info-area">
-          <h3 [style.color]="topic.accent">{{ topic.name }}</h3>
+          
+          <h3 [style.color]="topic.accent">{{ topic.title || topic.name }}</h3>
           
           <div class="tags">
             <span *ngFor="let tag of topic.tags" class="tag">{{ tag }}</span>

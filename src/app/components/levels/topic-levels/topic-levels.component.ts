@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { LevelsDataService } from 'src/app/services/levels-data/levels-data.service'; 
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-topic-levels',
@@ -16,7 +18,6 @@ export class TopicLevelsComponent implements OnInit {
   unlockedLevel: number = 1; 
   userAnswer: string = '';
   
-  // ✅ UI States for AI Feedback
   showSuccess: boolean = false;
   isChecking: boolean = false; 
   feedbackMessage: string = ''; 
@@ -25,45 +26,87 @@ export class TopicLevelsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private levelsDataService: LevelsDataService,
+    private http: HttpClient, 
     private toaster: ToastrService
   ) {}
 
   ngOnInit(): void {
+    // 1. Get IDs from storage and route
     this.topicId = this.route.snapshot.paramMap.get('id');
+    const userId = localStorage.getItem('userId');
 
-    if (this.topicId) {
-      this.levelsDataService.getLevels(this.topicId).subscribe({
-        next: (data) => {
-          this.currentLevels = data;
-          this.isLoading = false;
-          this.loadProgress();
+    // Logging for Omar to debug in the browser console (F12)
+    console.log(`Checking Progress for User: ${userId}, Topic: ${this.topicId}`);
 
-          const levelToSelect = this.currentLevels.find(l => l.levelNumber === this.unlockedLevel) || this.currentLevels[0];
-          this.selectLevel(levelToSelect);
-        },
-        error: (err) => {
-          console.error('Failed to load levels:', err);
-          this.isLoading = false;
-        }
-      });
+    if (this.topicId && userId) {
+      this.isLoading = true;
+      
+      // ✅ Step 1: Fetch Progress from Profiling Table
+      this.http.get(`${environment.backendUrl}/api/progress/${userId}/${this.topicId}`)
+        .subscribe({
+          next: (res: any) => {
+            // If res.currentLevel is 3, this.unlockedLevel becomes 3
+            this.unlockedLevel = res.currentLevel || 1;
+            console.log("DB returned progress:", this.unlockedLevel);
+            this.loadLevels();
+          },
+          error: (err) => {
+            console.error("Error fetching progress from DB:", err);
+            this.unlockedLevel = 1; // Fallback to level 1
+            this.loadLevels();
+          }
+        });
+    } else {
+      this.toaster.error("User session not found. Please log in again.");
+      this.isLoading = false;
     }
   }
 
-  loadProgress() {
-    const savedProgress = localStorage.getItem(`${this.topicId}_progress`);
-    if (savedProgress) {
-      this.unlockedLevel = parseInt(savedProgress, 10);
-    }
+  loadLevels() {
+    if (!this.topicId) return;
+
+    this.levelsDataService.getLevels(this.topicId).subscribe({
+      next: (data) => {
+        // Sort levels by number to be safe
+        this.currentLevels = data.sort((a, b) => a.levelNumber - b.levelNumber);
+        
+        // ✅ Step 2: Sync Sidebar UI
+        this.updateLevelsStatus();
+
+        this.isLoading = false;
+        
+        // ✅ Step 3: Automatically select the highest unlocked level
+        const levelToSelect = this.currentLevels.find(l => l.levelNumber === this.unlockedLevel) 
+                             || this.currentLevels[0];
+        this.selectLevel(levelToSelect);
+      },
+      error: (err) => {
+        console.error('Failed to load levels data:', err);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  updateLevelsStatus() {
+    this.currentLevels.forEach(level => {
+      if (level.levelNumber < this.unlockedLevel) {
+        level.status = 'Done';
+      } else if (level.levelNumber === this.unlockedLevel) {
+        level.status = 'Current';
+      } else {
+        level.status = 'Locked';
+      }
+    });
   }
 
   selectLevel(level: any) {
+    // Block selection of locked levels
     if (level.levelNumber > this.unlockedLevel) {
+      this.toaster.info(`Level ${level.levelNumber} is locked! Complete Level ${this.unlockedLevel} first.`);
       return; 
     }
     this.selectedLevel = level;
     this.userAnswer = '';
-    
-    // Reset feedback states
     this.showSuccess = false;
     this.feedbackMessage = '';
   }
@@ -74,44 +117,38 @@ export class TopicLevelsComponent implements OnInit {
       return;
     }
 
-    // 1. Set Loading State
     this.isChecking = true;
     this.showSuccess = false;
     this.feedbackMessage = "🤖 AI is analyzing your logic...";
 
-    const userId = 1; // Hardcoded for now
+    const userId = parseInt(localStorage.getItem('userId') || '0');
 
-    // 2. Call the Backend (AI Check)
-    // Make sure your service has 'submitAnswer' (or 'saveAnswer' if you didn't rename it)
     this.levelsDataService.submitAnswer(userId, this.selectedLevel.id, this.userAnswer)
       .subscribe({
         next: (res: any) => {
           this.isChecking = false;
 
-          // 3. Handle AI Response
           if (res.success) {
-            // ✅ SUCCESS
             this.showSuccess = true;
-            this.feedbackMessage = res.message; // "Correct! Next level unlocked."
-            this.toaster.success("Great job! AI verified your code.");
+            this.feedbackMessage = res.message; 
+            this.toaster.success("Level Complete!");
 
-            // Unlock Next Level (Only if we are at the latest unlocked level)
-            if (this.selectedLevel.levelNumber === this.unlockedLevel && this.unlockedLevel < this.currentLevels.length) {
+            // ✅ Step 4: Progress logic
+            // Only increment if the user solved their CURRENT highest level
+            if (this.selectedLevel.levelNumber === this.unlockedLevel) {
               this.unlockedLevel++;
-              localStorage.setItem(`${this.topicId}_progress`, this.unlockedLevel.toString());
+              this.updateLevelsStatus();
             }
 
           } else {
-            // ❌ FAIL
             this.showSuccess = false;
-            this.feedbackMessage = res.message; // "Incorrect. AI says..."
-            this.toaster.error("Incorrect. Check the feedback!");
+            this.feedbackMessage = res.message;
+            this.toaster.error("Logic incorrect. Try again!");
           }
         },
         error: (err) => {
           this.isChecking = false;
-          console.error('Error:', err);
-          this.toaster.error("Server error. Could not check code.");
+          this.toaster.error("Submission failed. Check your internet connection.");
         }
       });
   }
