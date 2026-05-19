@@ -1,0 +1,40 @@
+<div class="chat-main-wrapper">
+  <div class="chat-header">
+    <div class="status-indicator"></div>
+    <div class="header-text">
+      <h2>VisualizeIT Community</h2>
+      <p>Real-time collaboration system</p>
+    </div>
+  </div>
+
+  <div class="message-area" #scrollMe (scroll)="onScroll()">
+    <div *ngFor="let msg of messages" 
+         [ngClass]="{'my-msg-row': msg.senderId === currentUserId, 'their-msg-row': msg.senderId !== currentUserId}">
+      
+      <div class="sender-tag" *ngIf="msg.senderId !== currentUserId">{{ msg.senderName }}</div>
+      
+      <div class="bubble">
+        <mat-icon class="delete-icon" 
+                  *ngIf="msg.senderId === currentUserId" 
+                  (click)="deleteMessage(msg.id)">
+          delete_outline
+        </mat-icon>
+
+        <span>{{ msg.content }}</span>
+
+        <span class="timestamp">{{ msg.timestamp | date:'shortTime' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-area">
+    <input type="text" 
+           placeholder="Start chat..." 
+           [(ngModel)]="newMessage" 
+           (keyup.enter)="sendMessage()">
+           
+    <button (click)="sendMessage()" [disabled]="!newMessage.trim()">
+      <mat-icon>send</mat-icon>
+    </button>
+  </div>
+</div>
