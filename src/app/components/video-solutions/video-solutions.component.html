@@ -1,0 +1,59 @@
+<div class="video-wrapper">
+  
+  <div class="video-header">
+    <div class="status-indicator"></div>
+    <div class="header-text">
+      <h2>VisualizeIT Solutions Library</h2>
+      <p>Watch step-by-step problem breakdowns from your instructors.</p>
+    </div>
+  </div>
+
+  <div class="content-area">
+    
+    <div class="instructor-upload-panel" *ngIf="userRole === 'INSTRUCTOR'">
+      <h3><mat-icon>video_call</mat-icon> Add New Solution</h3>
+      
+      <div class="form-group">
+        <input type="text" placeholder="Video Title (e.g., Quick Sort Debugging)" [(ngModel)]="newTitle">
+        <input type="text" placeholder="Paste your Loom link here..." [(ngModel)]="newUrl">
+        
+        <button (click)="addVideo()" [disabled]="!newTitle.trim() || !newUrl.trim() || isSubmitting">
+          <mat-icon>cloud_upload</mat-icon> Post Video
+        </button>
+      </div>
+    </div>
+
+    <div class="video-grid" *ngIf="videos.length > 0; else noVideos">
+      <div class="video-card" *ngFor="let vid of videos">
+        
+        <button class="delete-btn" *ngIf="userRole === 'INSTRUCTOR'" (click)="deleteVideo(vid.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+
+        <div class="player-container" *ngIf="getSafeEmbedUrl(vid.url) as safeUrl; else externalLink">
+          <iframe [src]="safeUrl" frameborder="0" allowfullscreen></iframe>
+        </div>
+
+        <ng-template #externalLink>
+          <div class="external-container">
+            <mat-icon>ondemand_video</mat-icon>
+            <a [href]="vid.url" target="_blank" class="external-btn">Open External Link</a>
+          </div>
+        </ng-template>
+
+        <div class="video-info">
+          <h4>{{ vid.title }}</h4>
+          <span class="instructor-tag">By {{ vid.instructorName }} • {{ vid.uploadedAt | date:'mediumDate' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noVideos>
+      <div class="empty-state">
+        <mat-icon>video_library</mat-icon>
+        <p>No video solutions have been posted yet.</p>
+      </div>
+    </ng-template>
+
+  </div>
+</div>

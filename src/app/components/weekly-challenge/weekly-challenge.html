@@ -1,0 +1,101 @@
+<div class="challenge-container">
+  <div class="start-overlay card-style" *ngIf="!isChallengeStarted && !hasSubmitted">
+    <div class="start-content">
+      <div class="welcome-icon">🚀</div>
+      <h2 class="header-title">Weekly Challenge: <span class="highlight">{{ currentChallenge.title }}</span></h2>
+      <p class="start-instruction">
+        Ready to sharpen your skills? Once you click start, the problem will be revealed and the timer will begin.
+      </p>
+      <button class="btn start-action-btn" (click)="onStartChallenge()">
+        Start Challenge
+      </button>
+    </div>
+  </div>
+
+  <ng-container *ngIf="isChallengeStarted || hasSubmitted">
+    
+    <header class="challenge-header">
+      <div class="header-left">
+        <h2 class="header-title">
+          Weekly Challenge: <span class="highlight">{{ currentChallenge.title }}</span>
+        </h2>
+        <div class="timer-badge" *ngIf="!showLeaderboard">⏱️ {{ formattedTime }}</div>
+      </div>
+      
+      <button class="btn toggle-btn" (click)="toggleLeaderboard()">
+        {{ showLeaderboard ? '← Back to Editor' : 'View My Rank 🏆' }}
+      </button>
+    </header>
+
+    <div class="workspace" *ngIf="!showLeaderboard">
+      <div class="problem-section card-style">
+        <div class="section-label">Problem Statement</div>
+        <div class="description-content">{{ currentChallenge.description }}</div>
+      </div>
+
+      <div class="editor-section card-style">
+        <div class="editor-header">
+          <div class="section-label">Code Editor</div>
+          <select class="lang-select" [(ngModel)]="selectedLanguage">
+            <option value="detect">Auto Detect</option>
+            <option value="python">Python</option>
+            <option value="cpp">C++</option>
+            <option value="java">Java</option>
+          </select>
+        </div>
+        
+        <textarea 
+          class="code-input" 
+          [(ngModel)]="studentCode" 
+          spellcheck="false"
+          [disabled]="hasSubmitted"
+          [placeholder]="hasSubmitted ? '🔒 Locked. Submission complete.' : 'Write your code here...'">
+        </textarea>
+        
+        <div class="editor-footer">
+          <button class="btn run-btn">Run Tests</button>
+          <button class="btn submit-btn" (click)="submitCode()" [disabled]="hasSubmitted">
+            {{ hasSubmitted ? 'Submitted ✅' : 'Submit Code' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="rankings-section card-style" *ngIf="showLeaderboard">
+      <div class="section-label">Live Leaderboard</div>
+      <table class="ranking-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Student</th>
+            <th>Time</th>
+            <th>Complexity</th>
+            <th>Correctness</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let student of leaderboard; let i = index" [class.is-me]="student.isMe">
+            <td class="rank-col">#{{ student.overallRank || (i + 1) }}</td>
+            <td class="student-col">
+              {{ student.studentName || student.name }} 
+              <span *ngIf="student.isMe" class="badge">You</span>
+            </td>
+            <td class="time-col">{{ student.timeTaken }}</td>
+            <td class="complexity-col">{{ student.complexityScore }}</td>
+            <td style="vertical-align: middle;">
+              <div class="progress-container">
+                <div class="progress-fill" [style.width.%]="student.correctness"></div>
+                <div class="progress-text">{{ student.correctness }}%</div>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="leaderboard.length === 0">
+            <td colspan="5" style="text-align: center; padding: 20px; color: #94a3b8;">
+              No submissions yet. Be the first to solve it!
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+</div>

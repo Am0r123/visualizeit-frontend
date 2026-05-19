@@ -1,0 +1,169 @@
+.video-wrapper {
+  height: 85vh;
+  width: 95%;
+  margin: 20px auto;
+  background: #0b1120;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #1e293b;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  color: #f8fafc;
+
+  .video-header {
+    padding: 20px;
+    background: #0f172a;
+    border-bottom: 1px solid #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    .status-indicator {
+      width: 12px;
+      height: 12px;
+      background: #6366f1; /* Loom Indigo/Purple Accent */
+      border-radius: 50%;
+      box-shadow: 0 0 10px #6366f1;
+    }
+    h2 { margin: 0; font-size: 1.2rem; }
+    p { margin: 0; color: #94a3b8; font-size: 0.85rem; }
+  }
+
+  .content-area {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    &::-webkit-scrollbar { width: 6px; }
+    &::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
+    .instructor-upload-panel {
+      background: #0f172a;
+      border: 1px dashed #334155;
+      border-radius: 12px;
+      padding: 20px;
+
+      h3 { display: flex; align-items: center; gap: 8px; margin: 0 0 15px 0; font-size: 1.1rem; color: #0ea5e9;}
+
+      .form-group {
+        display: flex;
+        gap: 15px;
+        @media (max-width: 768px) { flex-direction: column; }
+
+        input {
+          flex: 1;
+          background: #0b1120;
+          border: 1px solid #334155;
+          padding: 12px;
+          border-radius: 8px;
+          color: white;
+          outline: none;
+          &:focus { border-color: #0ea5e9; }
+        }
+
+        button {
+          background: #0ea5e9;
+          color: white;
+          border: none;
+          padding: 0 25px;
+          border-radius: 8px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-weight: 500;
+          transition: 0.2s;
+          &:hover:not(:disabled) { background: #0284c7; }
+          &:disabled { opacity: 0.5; cursor: not-allowed; }
+        }
+      }
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+
+      .video-card {
+        background: #0f172a;
+        border: 1px solid #1e293b;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+        transition: transform 0.2s;
+        &:hover { transform: translateY(-3px); border-color: #334155; }
+
+        .delete-btn {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background: rgba(239, 68, 68, 0.9);
+          border: none;
+          color: white;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          z-index: 10;
+          opacity: 0;
+          transition: opacity 0.2s;
+          mat-icon { font-size: 18px; width: 18px; height: 18px; }
+        }
+        &:hover .delete-btn { opacity: 1; }
+
+        .player-container {
+          position: relative;
+          width: 100%;
+          padding-bottom: 56.25%; 
+          background: #000;
+          iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+          }
+        }
+
+        .external-container {
+          height: 170px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          background: #1e293b;
+          gap: 10px;
+          mat-icon { font-size: 40px; width: 40px; height: 40px; color: #64748b; }
+          .external-btn {
+            background: #334155;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            &:hover { background: #475569; }
+          }
+        }
+
+        .video-info {
+          padding: 15px;
+          h4 { margin: 0 0 5px 0; color: #f8fafc; font-size: 1.05rem; }
+          .instructor-tag { font-size: 0.8rem; color: #64748b; }
+        }
+      }
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 200px;
+      color: #64748b;
+      mat-icon { font-size: 48px; width: 48px; height: 48px; margin-bottom: 10px; opacity: 0.5; }
+    }
+  }
+}

@@ -1,0 +1,296 @@
+$dark-bg: #0b0e14;
+$card-bg: #151921;
+$editor-bg: #010409;
+$electric-blue: #00f2ff;
+$neon-purple: #bc13fe;
+$text-main: #f8fafc;
+$text-muted: #94a3b8;
+
+.challenge-container {
+  padding: 2rem;
+  background-color: $dark-bg;
+  min-height: 100vh;
+  color: $text-main;
+  font-family: 'Inter', sans-serif;
+
+  /* --- NEW: START CHALLENGE OVERLAY --- */
+  .start-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 75vh;
+    animation: fadeIn 0.6s ease-out;
+
+    .start-content {
+      text-align: center;
+      max-width: 550px;
+      padding: 3.5rem;
+      background: $card-bg;
+      border: 1px solid rgba(188, 19, 254, 0.2);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 
+                  0 0 20px rgba(188, 19, 254, 0.1);
+
+      .welcome-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        filter: drop-shadow(0 0 10px $electric-blue);
+      }
+
+      .header-title {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        color: $text-main;
+        .highlight {
+          color: $electric-blue;
+          text-shadow: 0 0 10px rgba(0, 242, 255, 0.4);
+        }
+      }
+
+      .start-instruction {
+        color: $text-muted;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 2.5rem;
+      }
+
+      .start-action-btn {
+        background: linear-gradient(135deg, $electric-blue 0%, $neon-purple 100%);
+        color: white;
+        border: none;
+        padding: 14px 45px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(188, 19, 254, 0.3);
+
+        &:hover {
+          transform: translateY(-3px) scale(1.03);
+          box-shadow: 0 8px 25px rgba(188, 19, 254, 0.5);
+        }
+      }
+    }
+  }
+
+  .challenge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      
+      .header-title {
+        margin: 0;
+        color: $text-muted;
+        .highlight {
+          color: $text-main;
+          text-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+        }
+      }
+
+      .timer-badge {
+        background: rgba(188, 19, 254, 0.1);
+        color: $neon-purple;
+        border: 1px solid rgba(188, 19, 254, 0.3);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        box-shadow: 0 0 10px rgba(188, 19, 254, 0.2);
+        margin-left: 1rem;
+      }
+    }
+  }
+
+  .btn {
+    background: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    padding: 10px 24px;
+    font-weight: 600;
+    transition: 0.2s;
+
+    &.toggle-btn { color: $electric-blue; border: 1px solid $electric-blue; }
+    
+    &.submit-btn { 
+      color: $neon-purple; 
+      border: 1px solid $neon-purple; 
+      &:disabled {
+        color: $text-muted;
+        border-color: rgba(255,255,255,0.1);
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+    }
+
+    &.run-btn { color: $text-muted; border: 1px solid rgba(255, 255, 255, 0.2); }
+
+    &:hover:not(:disabled) { 
+      background: rgba(255,255,255,0.05); 
+      transform: translateY(-1px); 
+    }
+  }
+
+  .card-style {
+    background: $card-bg;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .section-label {
+    color: $electric-blue;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+  }
+
+  .workspace {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 1.5rem;
+
+    .problem-section { 
+      border-top: 4px solid $electric-blue; 
+      .description-content { color: $text-muted; line-height: 1.6; white-space: pre-wrap; }
+    }
+
+    .editor-section { 
+        border-top: 4px solid $neon-purple; 
+        display: flex;
+        flex-direction: column;
+
+        .editor-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1rem;
+
+          .lang-select {
+            background: $editor-bg;
+            color: $electric-blue;
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            padding: 6px 12px;
+            border-radius: 6px;
+            outline: none;
+            cursor: pointer;
+            
+            option { background: $card-bg; color: $electric-blue; }
+          }
+        }
+
+        .code-input {
+            width: 100%;
+            box-sizing: border-box;
+            flex-grow: 1;
+            background: $editor-bg;
+            color: #cbd5e1;
+            padding: 1.2rem;
+            min-height: 350px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            resize: none;
+            outline: none;
+            transition: 0.3s ease;
+            
+            &:focus { border-color: $neon-purple; }
+            
+            &:disabled {
+              opacity: 0.6;
+              cursor: not-allowed;
+              background: #0a0c10;
+              border-color: rgba(255, 255, 255, 0.02);
+            }
+        }
+
+        .editor-footer {
+          display: flex;
+          justify-content: flex-end;
+          gap: 1rem;
+          margin-top: 1rem;
+        }
+    }
+  }
+
+  .rankings-section {
+    .ranking-table {
+      width: 100%;
+      border-collapse: collapse;
+      
+      tr.is-me { background: rgba(188, 19, 254, 0.1); box-shadow: inset 2px 0 0 $neon-purple; }
+      
+      th, td { 
+        padding: 16px; 
+        text-align: left; 
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+      }
+      
+      th { color: $text-muted; text-transform: uppercase; font-size: 0.75rem; }
+
+      .student-col, .time-col, .complexity-col { color: $neon-purple; }
+      .rank-col { color: $electric-blue; font-weight: bold; }
+      .badge { 
+        background: $neon-purple; 
+        color: white;
+        padding: 2px 8px; 
+        border-radius: 4px; 
+        font-size: 0.7rem;
+        margin-left: 8px;
+        font-weight: bold;
+      }
+    }
+    
+    .progress-container {
+      position: relative;
+      height: 24px;
+      width: 100%;
+      min-width: 120px;
+      background: $editor-bg;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      
+      .progress-fill {
+        height: 100%;
+        background: $electric-blue;
+        box-shadow: 0 0 10px rgba(0, 242, 255, 0.4);
+        transition: width 0.5s ease-in-out;
+      }
+      
+      .progress-text {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 800;
+        font-size: 0.85rem;
+        color: #ffffff;
+        text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.9);
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}

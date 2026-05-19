@@ -1,0 +1,64 @@
+<div class="support-wrapper">
+  
+  <div class="sidebar-contacts" *ngIf="userRole === 'INSTRUCTOR'">
+    <div class="contact-header">
+      <h3>Active Queries</h3>
+    </div>
+    <ul class="contact-list">
+      <li *ngIf="activeStudents.length === 0" class="no-chats">No active student chats.</li>
+      
+      <li *ngFor="let student of activeStudents" 
+          (click)="selectStudent(student)" 
+          [class.active]="selectedStudent === student">
+        <mat-icon>person</mat-icon>
+        <span>{{ student }}</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="chat-area" [class.full-width]="userRole === 'STUDENT'">
+    
+    <div class="chat-header">
+      <div class="chat-info">
+        <mat-icon>support_agent</mat-icon>
+        <h2 *ngIf="userRole === 'STUDENT'">Instructor Help Desk</h2>
+        <h2 *ngIf="userRole === 'INSTRUCTOR'">
+          {{ selectedStudent ? 'Chatting with ' + selectedStudent : 'Select a student' }}
+        </h2>
+      </div>
+      <span class="warning-text">Chats auto-delete after 10 days.</span>
+    </div>
+
+    <div class="chat-history" #chatWindow>
+      <div *ngIf="!selectedStudent && userRole === 'INSTRUCTOR'" class="select-prompt">
+        <mat-icon>forum</mat-icon>
+        <p>Select a student from the sidebar to view their question.</p>
+      </div>
+
+      <div class="message-row" *ngFor="let msg of messages" 
+           [ngClass]="msg.senderName === userName ? 'sent-row' : 'received-row'">
+        
+        <div class="bubble" [ngClass]="msg.senderName === userName ? 'bubble-sent' : 'bubble-received'">
+          <div class="sender-name" *ngIf="msg.senderName !== userName">
+            {{ msg.senderName }} <span class="role-badge" *ngIf="msg.senderRole === 'INSTRUCTOR'">Instructor</span>
+          </div>
+          <p class="content">{{ msg.content }}</p>
+          <span class="timestamp">{{ msg.sentAt | date:'shortTime' }}</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="chat-input" *ngIf="selectedStudent">
+      <input type="text" 
+             placeholder="Type your message here..." 
+             [(ngModel)]="newMessage" 
+             (keyup.enter)="sendMessage()">
+      <button (click)="sendMessage()" [disabled]="!newMessage.trim()">
+        <mat-icon>send</mat-icon>
+      </button>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,25 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { WeeklyChallengeComponent } from './weekly-challenge';
+
+describe('WeeklyChallengeComponent', () => {
+  let component: WeeklyChallengeComponent;
+  let fixture: ComponentFixture<WeeklyChallengeComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [WeeklyChallengeComponent]
+    })
+      .compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(WeeklyChallengeComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

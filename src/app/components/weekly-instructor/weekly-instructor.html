@@ -1,0 +1,80 @@
+<div class="instructor-container">
+  
+  <header class="dashboard-header">
+    <div class="header-left">
+      <h2 class="title">Instructor <span class="highlight">Dashboard</span></h2>
+    </div>
+    
+    <div class="header-actions">
+      <button class="btn toggle-btn" (click)="toggleView()">
+        {{ showLeaderboard ? '← CREATE CHALLENGE' : 'VIEW AI LEADERBOARD 🏆' }}
+      </button>
+   
+    </div>
+  </header>
+
+  <div class="centered-workspace" *ngIf="!showLeaderboard">
+    <div class="instructor-form-card">
+      <h3 class="form-title">DESIGN WEEKLY CHALLENGE</h3>
+      
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label>CHALLENGE TITLE</label>
+          <input type="text" [(ngModel)]="challengeTitle" placeholder="e.g., Reverse Binary Tree" class="compact-input">
+        </div>
+
+        <div class="form-group full-width">
+          <label>PROBLEM DESCRIPTION</label>
+          <textarea [(ngModel)]="challengeDescription" rows="5" placeholder="Explain the rules..." class="compact-textarea"></textarea>
+        </div>
+
+        <div class="form-group full-width">
+          <label>STARTING CODE TEMPLATE</label>
+          <textarea [(ngModel)]="startingCode" rows="6" class="code-editor-sim compact-code" placeholder="def solve():..."></textarea>
+        </div>
+      </div>
+
+      <button class="btn publish-btn" (click)="publishChallenge()" [disabled]="isPublishing">
+        {{ isPublishing ? '⏳ PUBLISHING...' : '🚀 PUBLISH TO STUDENTS' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="rankings-section" *ngIf="showLeaderboard">
+    <table class="ranking-table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Student</th>
+          <th>Time</th>
+          <th>Complexity</th>
+          <th>AI Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of leaderboard; let i = index">
+          <td class="rank-col">#{{ student.overallRank || (i + 1) }}</td>
+          <td>{{ student.studentName }}</td>
+          <td>{{ student.timeTaken }}</td>
+          
+          <td class="complexity-col">{{ student.complexityScore }}</td>
+          
+          <td>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-weight: bold; width: 35px; color: #f8fafc; font-size: 0.85rem;">
+                {{ student.correctness }}%
+              </span>
+              <div class="progress-bar" style="flex-grow: 1; margin: 0;">
+                <div class="progress" [style.width.%]="student.correctness"></div>
+              </div>
+            </div>
+          </td>
+
+        </tr>
+        <tr *ngIf="leaderboard.length === 0">
+          <td colspan="5" style="text-align: center; padding: 20px; color: #94a3b8;">No submissions yet.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
