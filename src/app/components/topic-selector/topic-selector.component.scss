@@ -1,0 +1,134 @@
+/* --- TOPIC CARD --- */
+.topic-card {
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  .edit-link-text {
+    color: #94a3b8;
+    font-size: 0.85rem;
+  }
+}
+
+/* Delete Button styling */
+.delete-topic-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: #475569;
+  cursor: pointer;
+  z-index: 10;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+
+  mat-icon { font-size: 20px; height: 20px; width: 20px; }
+
+  &:hover {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    transform: scale(1.1);
+  }
+}
+
+/* --- ADD NEW TOPIC BUTTON --- */
+.add-topic-btn {
+  cursor: pointer;
+  border: 2px dashed #334155;
+  background: transparent;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: #00e5ff;
+  }
+
+  .empty-icon {
+    background: transparent;
+    color: #94a3b8;
+  }
+
+  .add-title {
+    color: #94a3b8;
+  }
+
+  .add-subtitle {
+    color: #64748b;
+    font-size: 0.85rem;
+  }
+}
+
+/* --- ADD TOPIC FORM --- */
+.add-topic-form {
+  border: 2px solid #00e5ff;
+  background: rgba(0, 229, 255, 0.05);
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+
+  .form-title {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #00e5ff;
+  }
+
+  .form-input {
+    width: 100%;
+    box-sizing: border-box; 
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #334155;
+    background: #0b1320;
+    color: white;
+    margin-bottom: 15px;
+    outline: none;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      border-color: #00e5ff;
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+
+    button {
+      flex: 1;
+      padding: 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+
+    .btn-save {
+      background: #00e5ff;
+      color: #000;
+      border: none;
+
+      &:hover {
+        background: #00cce6;
+      }
+    }
+
+    .btn-cancel {
+      background: transparent;
+      color: #f43f5e;
+      border: 1px solid #f43f5e;
+
+      &:hover {
+        background: rgba(244, 63, 94, 0.1);
+      }
+    }
+  }
+}

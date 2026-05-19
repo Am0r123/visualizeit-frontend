@@ -1,0 +1,42 @@
+<div class="dashboard-container">
+  
+  <div class="header">
+    <h1>Manage <span class="highlight">Levels</span></h1>
+    <p>Select a topic to add, edit, or generate coding challenges.</p>
+  </div>
+
+  <div class="stats-grid">
+    
+    <div class="stat-card topic-card" *ngFor="let topic of topics" [routerLink]="['/instructor/levels', topic.id]">
+      <button class="delete-topic-btn" (click)="deleteTopic(topic.id, $event)" title="Delete Topic">
+        <mat-icon>delete</mat-icon>
+      </button>
+
+      <div class="icon-box blue"><mat-icon>folder_open</mat-icon></div>
+      <div class="info">
+        <h3>{{ topic.name }}</h3>
+        <span class="edit-link-text">Edit Levels ➔</span>
+      </div>
+    </div>
+
+    <div class="stat-card add-topic-btn" *ngIf="!isAddingTopic" (click)="toggleAddForm()">
+      <div class="icon-box empty-icon"><mat-icon>add</mat-icon></div>
+      <div class="info">
+        <h3 class="add-title">Add New Topic</h3>
+        <span class="add-subtitle">Click to create</span>
+      </div>
+    </div>
+
+    <div class="stat-card add-topic-form" *ngIf="isAddingTopic">
+      <h3 class="form-title">New Topic Name</h3>
+      
+      <input type="text" class="form-input" [(ngModel)]="newTopicName" placeholder="e.g. Graph Theory">
+      
+      <div class="form-actions">
+        <button class="btn-save" (click)="saveNewTopic()">Save</button>
+        <button class="btn-cancel" (click)="toggleAddForm()">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+</div>

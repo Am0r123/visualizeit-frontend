@@ -1,0 +1,20 @@
+.watch-window-panel {
+  margin-top: 15px;
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 10px;
+
+  h3 { color: #aaa; font-size: 14px; margin-bottom: 8px; }
+
+  .watch-table {
+    width: 100%;
+    border-collapse: collapse;
+    
+    th { text-align: left; color: #666; border-bottom: 1px solid #444; padding-bottom: 4px; }
+    td { padding: 4px 0; font-family: monospace; }
+    
+    .var-name { color: #9cdcfe; } /* VS Code light blue for variables */
+    .var-value { color: #ce9178; } /* VS Code orange for values */
+  }
+}
