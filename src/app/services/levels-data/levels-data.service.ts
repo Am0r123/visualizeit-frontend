@@ -18,7 +18,7 @@ export class LevelsDataService {
     return this.http.get<any[]>(`${this.apiUrl}/levels/${topicSlug}`);
   }
 
-  // ✅ NEW: Submit Code for AI Grading
+  // ✅ EXISTING: Submit Code for AI Grading
   submitAnswer(userId: number, levelId: number, code: string): Observable<any> {
     const payload = {
       userId: userId,
@@ -26,5 +26,19 @@ export class LevelsDataService {
       code: code
     };
     return this.http.post(`${this.apiUrl}/submit`, payload);
+  }
+
+  // ==========================================
+  // ✅ NEW: INSTRUCTOR APIs
+  // ==========================================
+
+  // 1. Call the AI to generate the level JSON
+  generateLevelWithAI(requestData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/generate-level`, requestData);
+  }
+
+  // 2. Save the final level to the MySQL database
+  addDynamicLevel(topicId: number, levelData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/levels/topic/${topicId}/add`, levelData);
   }
 }
