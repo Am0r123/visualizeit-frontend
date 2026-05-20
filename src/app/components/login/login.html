@@ -2,7 +2,6 @@
   <div class="nodes"></div>
 
   <div class="auth-card">
-    <!-- HEADER -->
     <div class="editor-header">
       <span class="dot red"></span>
       <span class="dot yellow"></span>
@@ -12,13 +11,35 @@
       </span>
     </div>
 
-    <!-- LOGIN FORM -->
+    <div class="role-switcher">
+      <button 
+        type="button" 
+        [class.active]="role === 'STUDENT'" 
+        (click)="selectRole('STUDENT')">
+        <span>🎓 Student</span>
+      </button>
+      <button 
+        type="button" 
+        [class.active]="role === 'INSTRUCTOR'" 
+        (click)="selectRole('INSTRUCTOR')">
+        <span>👨‍🏫 Instructor</span>
+      </button>
+      <button 
+        type="button" 
+        [class.active]="role === 'ADMIN'" 
+        (click)="selectRole('ADMIN')">
+        <span>👑 Admin</span>
+      </button>
+    </div>
+
     <form
       *ngIf="isLogin"
       #loginForm="ngForm"
       (ngSubmit)="submit(loginForm)"
       novalidate
     >
+      <input type="hidden" name="role" [ngModel]="role">
+
       <input
         type="email"
         name="email"
@@ -35,25 +56,26 @@
         placeholder="Password"
       />
 
-      <button type="submit" [disabled]="loginForm.invalid">
-        Login
+      <button type="submit" [disabled]="loginForm.invalid" class="submit-btn">
+        Login as {{ role | titlecase }}
       </button>
 
       <p class="message" *ngIf="message">{{ message }}</p>
 
-      <p class="switch">
+      <p class="switch" *ngIf="role === 'STUDENT'">
         New user?
         <span (click)="toggleMode()">Create account</span>
       </p>
     </form>
 
-    <!-- SIGN UP FORM -->
     <form
-      *ngIf="!isLogin"
+      *ngIf="!isLogin && role === 'STUDENT'"
       #signupForm="ngForm"
       (ngSubmit)="submit(signupForm)"
       novalidate
     >
+      <input type="hidden" name="role" [ngModel]="role">
+
       <input
         type="text"
         name="username"
@@ -78,8 +100,8 @@
         placeholder="Password"
       />
 
-      <button type="submit" [disabled]="signupForm.invalid">
-        Sign Up
+      <button type="submit" [disabled]="signupForm.invalid" class="submit-btn">
+        Sign Up as Student
       </button>
 
       <p class="message" *ngIf="message">{{ message }}</p>
@@ -89,5 +111,13 @@
         <span (click)="toggleMode()">Login</span>
       </p>
     </form>
+
+    <div *ngIf="!isLogin && role !== 'STUDENT'" class="restricted-message">
+      <p class="info-text">{{ role | titlecase }}s cannot create accounts here.</p>
+      <p class="switch">
+        <span (click)="toggleMode()">Return to Login</span>
+      </p>
+    </div>
+
   </div>
 </div>
