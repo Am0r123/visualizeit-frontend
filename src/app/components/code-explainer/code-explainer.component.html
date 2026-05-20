@@ -1,0 +1,56 @@
+<div class="explainer-wrapper">
+  <div class="explainer-header">
+    <div class="status-indicator"></div>
+    <div class="header-text">
+      <h2>VisualizeIT Code Explainer</h2>
+      <p>Paste your code to get a step-by-step natural language breakdown</p>
+    </div>
+  </div>
+
+  <div class="content-area">
+    <div class="input-section">
+      <div class="section-title">
+        <mat-icon>code</mat-icon> Your Code
+      </div>
+      <textarea 
+        placeholder="Paste your Java, Python, or TypeScript code here..." 
+        [(ngModel)]="studentCode"
+        spellcheck="false">
+      </textarea>
+      
+      <div class="action-buttons">
+        <button class="clear-btn" (click)="clearAll()" [disabled]="isLoading || (!studentCode && !explanationResult)">
+          Clear
+        </button>
+        <button class="submit-btn" (click)="submitCode()" [disabled]="!studentCode.trim() || isLoading">
+          <mat-icon *ngIf="!isLoading">auto_awesome</mat-icon>
+          <span *ngIf="!isLoading">Explain Step-by-Step</span>
+          <span *ngIf="isLoading" class="loading-spinner">Processing...</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="output-section">
+      <div class="section-title">
+        <mat-icon>school</mat-icon> Step-by-Step Explanation
+      </div>
+      
+      <div class="result-box" [class.empty]="!explanationResult && !isLoading">
+        
+        <div class="placeholder" *ngIf="!explanationResult && !isLoading">
+          <mat-icon class="large-icon">auto_awesome</mat-icon>
+          <h3>Awaiting Code</h3>
+          <p>Paste your snippet on the left to get a step-by-step breakdown.</p>
+        </div>
+
+        <div class="placeholder" *ngIf="isLoading">
+          <p class="pulse-text">AI is analyzing your code...</p>
+        </div>
+
+        <div class="explanation-content" *ngIf="explanationResult && !isLoading">
+          <pre>{{ explanationResult }}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
