@@ -1,0 +1,219 @@
+<section class="visualizer-page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">Custom Code Visualizer</p>
+      <h1>Enter code. Detect errors. Visualize instantly.</h1>
+      <p class="subtitle">
+        The editor starts empty. Press Verify to detect the code, show any errors below, and visualize immediately beside the code.
+      </p>
+    </div>
+
+    <div class="head-actions">
+      <label class="sample-select-wrap" aria-label="Load a sample visualization">
+        <span>Options</span>
+        <select [(ngModel)]="selectedSampleKey" (change)="insertSelectedSample()">
+          <option value="">Choose sample</option>
+          <option *ngFor="let sample of samples" [value]="sample.key">{{ sample.title }}</option>
+        </select>
+      </label>
+      <button class="ghost" type="button" (click)="editAgain()" [disabled]="!steps.length">✍️ Edit</button>
+      <button class="ghost" type="button" (click)="clearAll()">🧹 Clear</button>
+      <button class="primary" type="button" (click)="verifyAndRun()">✅ Verify</button>
+    </div>
+  </header>
+
+  <main class="workspace split-workspace">
+    <section class="left-panel">
+      <article class="card editor-card">
+        <div class="card-head">
+          <div>
+            <h2>Custom code space</h2>
+            <p>Start clean, paste your own code, then run it instantly. Errors appear below without delaying the visualization.</p>
+          </div>
+          <span class="pill" [class.ready]="hasUserCode">{{ hasUserCode ? 'Code entered' : 'Empty editor' }}</span>
+        </div>
+
+        <textarea
+          *ngIf="!isTraceMode"
+          [(ngModel)]="code"
+          class="code-input"
+          spellcheck="false"
+          placeholder="Paste your code here..."
+        ></textarea>
+
+        <ol *ngIf="isTraceMode" class="code-lines">
+          <li
+            *ngFor="let line of codeLines; let i = index"
+            [class.current-line]="currentStep?.line === i + 1"
+            [class.error-line]="issueAtLine(i + 1)?.severity === 'error'"
+            [class.warning-line]="issueAtLine(i + 1)?.severity === 'warning'"
+            [class.current-error-line]="currentStep?.line === i + 1 && issueAtLine(i + 1)?.severity === 'error'"
+          >
+            <code>{{ line || ' ' }}</code>
+          </li>
+        </ol>
+      </article>
+
+      <article class="card detection-card" *ngIf="detected">
+        <div class="card-head compact">
+          <h2>What the system detected</h2>
+          <span class="pill success">{{ detected.category }}</span>
+        </div>
+
+        <div class="detected-grid">
+          <div>
+            <span>Language</span>
+            <strong>{{ detected.language }}</strong>
+          </div>
+          <div>
+            <span>Visualization</span>
+            <strong>{{ detected.title }}</strong>
+          </div>
+          <div class="wide">
+            <span>What you entered</span>
+            <strong>{{ detected.whatUserEntered }}</strong>
+          </div>
+          <div class="wide">
+            <span>Extracted details</span>
+            <ul>
+              <li *ngFor="let item of detected.extractedData">{{ item }}</li>
+            </ul>
+          </div>
+          <div class="wide">
+            <span>How it will run</span>
+            <strong>{{ detected.nextAction }}</strong>
+          </div>
+        </div>
+      </article>
+
+      <article class="card issues-card" *ngIf="issues.length">
+        <div class="card-head compact">
+          <h2>Detected errors / logic messages</h2>
+          <span class="pill">{{ issues.length }}</span>
+        </div>
+        <div class="issue" *ngFor="let issue of issues" [class.error]="issue.severity === 'error'" [class.warning]="issue.severity === 'warning'">
+          <strong>Line {{ issue.line }} — {{ issue.severity | uppercase }}</strong>
+          <p>{{ issue.message }}</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="right-panel">
+      <article class="card visual-card">
+        <div class="visual-head">
+          <div>
+            <p class="eyebrow mini">Live Trace</p>
+            <h2>{{ detected?.title || 'No visualization yet' }}</h2>
+          </div>
+          <div class="step-badge">{{ currentStepLabel }}</div>
+        </div>
+
+        <div class="progress-shell">
+          <div class="progress-fill" [style.width.%]="statusPercent"></div>
+        </div>
+
+        <div class="current-message" [class.error-message]="currentIssue?.severity === 'error'" [class.warning-message]="currentIssue?.severity === 'warning'">
+          <strong>{{ currentIssue ? 'Detected issue on this line' : 'Current step' }}</strong>
+          <p>{{ currentStep?.description || 'Paste code and click Verify.' }}</p>
+        </div>
+
+        <div class="vars-panel" *ngIf="currentStep?.vars as vars">
+          <div *ngFor="let item of vars | keyvalue">
+            <span>{{ item.key }}</span>
+            <strong>{{ item.value }}</strong>
+          </div>
+        </div>
+
+        <div class="visual-stage" [ngSwitch]="currentStep?.view || 'empty'">
+          <div *ngSwitchCase="'bars'" class="bars-view">
+            <div class="bar-wrap" *ngFor="let bar of currentStep?.bars; let i = index">
+              <span class="bar-value">{{ bar.value }}</span>
+              <div
+                class="bar"
+                [class.active]="bar.state === 'active'"
+                [class.compare]="bar.state === 'compare'"
+                [class.swap]="bar.state === 'swap'"
+                [class.sorted]="bar.state === 'sorted'"
+                [class.found]="bar.state === 'found'"
+                [class.visited]="bar.state === 'visited'"
+                [style.height.px]="barHeight(bar.value)"
+              ></div>
+              <small>{{ i }}</small>
+              <b *ngIf="variableTextAtIndex(currentStep?.vars || {}, i)">{{ variableTextAtIndex(currentStep?.vars || {}, i) }}</b>
+            </div>
+          </div>
+
+          <div *ngSwitchCase="'stack'" class="stack-view">
+            <div class="empty-structure" *ngIf="!currentStep?.stack?.length">Empty Stack</div>
+            <div class="stack-item" *ngFor="let item of currentStep?.stack" [class.active]="item.state === 'active'" [class.new]="item.state === 'new'" [class.found]="item.state === 'found'">
+              <span>{{ item.value }}</span>
+              <small *ngIf="item.label">{{ item.label }}</small>
+            </div>
+          </div>
+
+          <div *ngSwitchCase="'queue'" class="queue-view">
+            <div class="empty-structure" *ngIf="!currentStep?.queue?.length">Empty Queue</div>
+            <div class="queue-item" *ngFor="let item of currentStep?.queue" [class.active]="item.state === 'active'" [class.new]="item.state === 'new'">
+              <small *ngIf="item.label">{{ item.label }}</small>
+              <span>{{ item.value }}</span>
+            </div>
+          </div>
+
+          <div *ngSwitchCase="'linkedList'" class="linked-list-view">
+            <div class="empty-structure" *ngIf="!currentStep?.list?.length">head → null</div>
+            <ng-container *ngFor="let item of currentStep?.list; let last = last">
+              <div class="list-node" [class.active]="item.state === 'active'" [class.new]="item.state === 'new'" [class.compare]="item.state === 'compare'" [class.found]="item.state === 'found'" [class.removed]="item.state === 'removed'">
+                <small *ngIf="item.label">{{ item.label }}</small>
+                <span>{{ item.value }}</span>
+              </div>
+              <div class="arrow" *ngIf="!last">→</div>
+            </ng-container>
+            <div class="null-node" *ngIf="currentStep?.list?.length">null</div>
+          </div>
+
+          <div *ngSwitchCase="'tree'" class="tree-view">
+            <div class="empty-structure" *ngIf="!currentStep?.treeNodes?.length">root = null</div>
+            <svg class="tree-svg" *ngIf="currentStep?.treeNodes?.length">
+              <line
+                *ngFor="let edge of currentStep?.treeEdges"
+                [attr.x1]="edge.fromX + '%'"
+                [attr.y1]="edge.fromY"
+                [attr.x2]="edge.toX + '%'"
+                [attr.y2]="edge.toY"
+              ></line>
+            </svg>
+            <div
+              class="tree-node"
+              *ngFor="let node of currentStep?.treeNodes"
+              [class.active]="node.state === 'active'"
+              [class.new]="node.state === 'new'"
+              [class.compare]="node.state === 'compare'"
+              [class.found]="node.state === 'found'"
+              [class.visited]="node.state === 'visited'"
+              [style.left.%]="node.x"
+              [style.top.px]="node.y"
+            >
+              {{ node.value }}
+            </div>
+          </div>
+
+          <div *ngSwitchDefault class="empty-visual">
+            <div class="scanner-icon" >⌁</div>
+            <h3>{{ isTraceMode ? 'No generated visual steps' : 'Waiting for code' }}</h3>
+            <p>{{ isTraceMode ? 'Errors are shown below the code. Paste a supported visual pattern to generate steps.' : 'Paste code, then press Verify.' }}</p>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button type="button" (click)="play()" [disabled]="!steps.length || isPlaying">▶ Play</button>
+          <button type="button" (click)="pause()" [disabled]="!isPlaying">⏸ Pause</button>
+          <button type="button" (click)="prev()" [disabled]="!steps.length">◀ Prev</button>
+          <button type="button" (click)="next()" [disabled]="!steps.length">Next ▶</button>
+          <button type="button" (click)="restart()" [disabled]="!steps.length">↺ Restart</button>
+          <span class="speed">x{{ speed }}</span>
+          <input type="range" min="1" max="10" [(ngModel)]="speed" />
+        </div>
+      </article>
+    </section>
+  </main>
+</section>
